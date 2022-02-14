@@ -1,0 +1,37 @@
+<h1>List claim</h1>
+
+<form action="/claims/create" method="post">
+<label for="debtor">Debtor</label>
+    <input type="text" name="debtor">
+<label for="debtorLocation">Debtor Location</label>
+    <input type="text" name="debtorLocation">
+<label for="faceValue">Face Value</label>
+    <input type="number" name="faceValue">
+<select name="currency">
+    <option value="EUR">EUR</option>
+    <option value="USD">USD</option>
+    <option value="GBP">GBP</option>
+</select>
+<label for="type">Type</label>
+<select name="type">
+    <option value="Corporate">Corporate</option>
+    <option value="Consumer">Consumer</option>
+    <option value="Retail Mortgage">Retail Mortgage</option>
+    <option value="Commercial Real Estate">Commercial Real Estate</option>
+    <option value="Trade">Trade</option>
+</select>
+<label for="minimumPrice">Minimum Price</label>
+    <input type="number" name="minimumPrice">
+<label> Performance
+<select name="performance">
+    <option value="performing">Performing</option>
+    <option value="defaulted">Defaulted</option>
+    <option value="stressed">Stressed</option>
+</select>
+</label>
+
+<label for="maturity">Maturity Date</label>
+    <input type="date" name="maturity">
+
+<button type="submit">Publish claim</button>
+</form>
