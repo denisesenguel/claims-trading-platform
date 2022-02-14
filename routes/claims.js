@@ -62,9 +62,15 @@ router.post("/:claimId/edit", async (req, res, next)=> {
     } catch (error) {
         console.log(error);
     }
-})
+});
 
-
-
+router.get("/:claimId/delete", async (req, res, next) => {
+    try {
+        await Claim.findByIdAndDelete(req.params.claimId);
+        res.redirect("/claims");
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 module.exports = router;
