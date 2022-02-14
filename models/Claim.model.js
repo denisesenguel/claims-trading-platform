@@ -30,7 +30,7 @@ const claimSchema = new Schema(
     },
     type: {
       type: String,
-      enum: ['Corporate', 'Consumer', 'Retail Mortgage', 'Commercial Real Estate', 'Liability'],
+      enum: ['Corporate', 'Consumer', 'Retail Mortgage', 'Commercial Real Estate', 'Trade'],
       required: true
     },
     minimumPrice: {
@@ -41,6 +41,10 @@ const claimSchema = new Schema(
     performance: {
       type: String,
       enum: ['performing', 'defaulted', 'stressed']
+    },
+    maturity: {
+      type: Date,
+      required: true
     }
   },
   {
