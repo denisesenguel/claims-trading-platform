@@ -16,29 +16,28 @@ router.post("/create", async (req, res, next)=> {
     } catch (error) {
         console.log(error);
     }
-})
+});
 
+router.get("/", async (req, res, next) => {
+    try {
+        const allClaims = await Claim.find();
+        res.render("claims/claims-overview", {claims: allClaims});
+    } catch (error) {
+        console.log(error);
+    }
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+router.get("/:claimId/details", async (req, res, next) => {
+    try {
+        const oneClaim = await Claim.findById(req.params.claimId).lean();
+        for (let key in oneClaim) {
+            if (key.startsWith("_") || key == 'createdAt' || key == 'updatedAt') delete oneClaim[key]; 
+        }
+        res.render("claims/claim-details", {claim: oneClaim});
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 
 module.exports = router;

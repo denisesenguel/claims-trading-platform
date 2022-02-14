@@ -1,0 +1,13 @@
+<h1>All Claims</h1>
+
+{{#each claims}}
+
+<div>
+    <h6> {{this.type}} </h6>
+    <h5> {{this.currency}} {{this.faceValue}} </h5>   
+    <p>{{this.debtorLocation}}</p>
+    <p>{{this.performance}}</p>
+    <a href="/claims/{{this._id}}/details"><button>Details</button></a>
+</div>
+
+{{/each}}
