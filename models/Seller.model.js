@@ -13,7 +13,8 @@ const sellerSchema = new Schema(
       trim: true
     },
     email: {
-      match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address.'],
+      type: String,
+      match: ["/^\S+@\S+\.\S+$/", 'Please use a valid email address.'],
       required: [true, "Email is required."],
       unique: true,
       lowercase: true,
