@@ -1,0 +1,37 @@
+<h1>Edit claim</h1>
+
+<form action="/claims/{{claim._id}}/edit" method="post">
+<label for="debtor">Debtor</label>
+    <input type="text" name="debtor" value="{{claim.debtor}}">
+<label for="debtorLocation">Debtor Location</label>
+    <input type="text" name="debtorLocation" value="{{claim.debtorLocation}}">
+<label for="faceValue">Face Value</label>
+    <input type="number" name="faceValue" value={{claim.faceValue}}>
+<select name="currency">
+    <option value="EUR" {{#if claim.EUR}} {{claim.EUR}} {{/if}}>EUR</option>
+    <option value="USD" {{#if claim.USD}} {{claim.USD}} {{/if}}>USD</option>
+    <option value="GBP" {{#if claim.GBP}} {{claim.GBP}} {{/if}}>GBP</option>
+</select>
+<label for="type">Type</label>
+<select name="type" selected="Trade">
+    <option value="Corporate"{{#if claim.Corporate}} {{claim.Corporate}} {{/if}} >Corporate</option>
+    <option value="Consumer" {{#if claim.Consumer}} {{claim.Consumer}} {{/if}}>Consumer</option>
+    <option value="Retail Mortgage"{{#if claim.[Retail Mortgage]}} {{claim.[Retail Mortgage]}} {{/if}}>Retail Mortgage</option>
+    <option value="Commercial Real Estate" {{#if claim.[Commercial Real Estate]}} {{claim.[Commercial Real Estate]}} {{/if}}>Commercial Real Estate</option>
+    <option value="Trade" {{#if claim.Trade}} {{claim.Trade}} {{/if}}>Trade</option>
+</select>
+<label for="minimumPrice">Minimum Price</label>
+    <input type="number" name="minimumPrice" value={{claim.minimumPrice}}>
+<label> Performance
+<select name="performance">
+    <option value="performing" {{#if claim.performing}} {{claim.performing}} {{/if}}>Performing</option>
+    <option value="defaulted" {{#if claim.defaulted}} {{claim.defaulted}} {{/if}}>Defaulted</option>
+    <option value="stressed" {{#if claim.stressed}} {{claim.stressed}} {{/if}}>Stressed</option>
+</select>
+</label>
+
+<label for="maturity">Maturity Date</label>
+    <input type="date" name="maturity" value={{claim.maturity}}>
+
+<button type="submit">Publish claim</button>
+</form>

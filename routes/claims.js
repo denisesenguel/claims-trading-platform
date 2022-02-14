@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Seller = require("./../models/Seller.model");
 const Claim = require("./../models/Claim.model");
 const mongoose = require("mongoose");
+const { format } = require("date-fns");
 
 router.get("/create", (req, res, next)=> {
     res.render("claims/claim-create");
@@ -33,11 +34,37 @@ router.get("/:claimId/details", async (req, res, next) => {
         for (let key in oneClaim) {
             if (key.startsWith("_") || key == 'createdAt' || key == 'updatedAt') delete oneClaim[key]; 
         }
-        res.render("claims/claim-details", {claim: oneClaim});
+        res.render("claims/claim-details", {claim: oneClaim, id: req.params.claimId});
     } catch (error) {
         console.log(error);
     }
 });
+
+router.get("/:claimId/edit", async (req, res, next)=> {
+    try {
+        const dbClaim = await Claim.findById(req.params.claimId).lean();
+        dbClaim[`${dbClaim.currency}`] = "selected";
+        dbClaim[`${dbClaim.type}`] = "selected";
+        dbClaim[`${dbClaim.performance}`] = "selected";
+        dbClaim.maturity = format(dbClaim.maturity, "yyyy-MM-dd");
+        console.log("dbClaim: ", dbClaim);
+        res.render("claims/claim-edit", {claim: dbClaim});
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+router.post("/:claimId/edit", async (req, res, next)=> {
+    try {
+        const dbUpdated = await Claim.findByIdAndUpdate(req.params.claimId, req.body, {new: true});
+        console.log("dbUpdated: ", dbUpdated);
+        res.redirect("/claims");
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+
 
 
 module.exports = router;
