@@ -8,27 +8,28 @@ const mongoose = require("mongoose");
 const saltRounds = 10;
 
 // Require the User model in order to interact with the database
-const User = require("../models/User.model");
+const Seller = require("../models/Seller.model");
+const Buyer = require("../models/Buyer.model");
 
 // Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
-const isLoggedOut = require("../middleware/isLoggedOut");
-const isLoggedIn = require("../middleware/isLoggedIn");
+// const isLoggedOut = require("../middleware/isLoggedOut");
+// const isLoggedIn = require("../middleware/isLoggedIn");
 
-router.get("/signup", isLoggedOut, (req, res) => {
+router.get("/signup", (req, res) => {
   res.render("auth/signup");
 });
 
-router.post("/signup", isLoggedOut, (req, res) => {
-  const { username, password } = req.body;
+router.post("/signup", async (req, res) => {
+  const { role, firstName, lastName, affiliation, email, password } = req.body;
 
-  if (!username) {
-    return res
+  if (!role || !firstName || !lastName || !email || !password) {
+    res
       .status(400)
-      .render("auth/signup", { errorMessage: "Please provide your username." });
+      .render("auth/signup", { errorMessage: "All fields are required." });
   }
 
   if (password.length < 8) {
-    return res.status(400).render("auth/signup", {
+    res.status(400).render("auth/signup", {
       errorMessage: "Your password needs to be at least 8 characters long.",
     });
   }
@@ -46,54 +47,56 @@ router.post("/signup", isLoggedOut, (req, res) => {
   */
 
   // Search the database for a user with the username submitted in the form
-  User.findOne({ username }).then((found) => {
-    // If the user is found, send the message username is taken
+  try {
+
+    const found = (role === 'Seller') ? await Seller.findOne({ email }) : await Buyer.findOne({ email });
+  
     if (found) {
-      return res
+      res
         .status(400)
-        .render("auth.signup", { errorMessage: "Username already taken." });
+        .render("auth/signup", { errorMessage: "Email already taken." });
     }
-
-    // if user is not found, create a new user - start with hashing the password
-    return bcrypt
-      .genSalt(saltRounds)
-      .then((salt) => bcrypt.hash(password, salt))
-      .then((hashedPassword) => {
-        // Create a user and save it in the database
-        return User.create({
-          username,
-          password: hashedPassword,
-        });
-      })
-      .then((user) => {
-        // Bind the user to the session object
-        req.session.user = user;
-        res.redirect("/");
-      })
-      .catch((error) => {
-        if (error instanceof mongoose.Error.ValidationError) {
-          return res
-            .status(400)
-            .render("auth/signup", { errorMessage: error.message });
-        }
-        if (error.code === 11000) {
-          return res.status(400).render("auth/signup", {
-            errorMessage:
-              "Username need to be unique. The username you chose is already in use.",
-          });
-        }
-        return res
-          .status(500)
-          .render("auth/signup", { errorMessage: error.message });
-      });
-  });
+  
+    const salt = await bcrypt.genSalt(saltRounds);
+    const passwordHash = await bcrypt.hash(password, salt);
+  
+    if (role === 'Seller') {
+  
+      const newSeller = {firstName, lastName, email, passwordHash};
+      if (affiliation) newSeller.affiliation = affiliation;
+      const seller = await Seller.create(newSeller);
+      req.session.seller = seller;
+  
+    } else {
+  
+      const newBuyer = {firstName, lastName, email, passwordHash};
+      if (affiliation) newBuyer.affiliation = affiliation;
+      const buyer = await Buyer.create(newBuyer);
+      req.session.buyer = buyer;
+  
+    }
+  
+    res.redirect("/");
+    
+  } catch (error) {
+    
+    if (error instanceof mongoose.Error.ValidationError) {
+      res
+        .status(400)
+        .render("auth/signup", { errorMessage: error.message });
+    }
+    res
+      .status(500)
+      .render("auth/signup", { errorMessage: error.message });
+  }
 });
+  
 
-router.get("/login", isLoggedOut, (req, res) => {
+router.get("/login", (req, res) => {
   res.render("auth/login");
 });
 
-router.post("/login", isLoggedOut, (req, res, next) => {
+router.post("/login", (req, res, next) => {
   const { username, password } = req.body;
 
   if (!username) {
@@ -141,7 +144,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
     });
 });
 
-router.get("/logout", isLoggedIn, (req, res) => {
+router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       return res

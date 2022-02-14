@@ -1,0 +1,44 @@
+<h1>Signup</h1>
+
+{{#if errorMessage}}  <h2>{{errorMessage}}</h2> {{/if}}
+
+<form action="/auth/signup" method="post">
+
+<label>
+    <input type="radio" name="role" value="Buyer">
+    Buy
+</label>
+<label>
+    <input type="radio" name="role" value="Seller">
+    Sell
+</label>
+
+<div>
+    <label>
+        First name
+        <input type="text" name="firstName">
+    </label>
+    <label>
+        Last name
+        <input type="text" name="lastName">
+    </label>
+</div>
+
+<label>
+    Affiliation
+    <input type="text" name="affiliation">
+</label>
+
+<label>
+    Email
+    <input type="email" name="email">
+</label>
+
+<label>
+    Password
+    <input type="password" name="password">
+</label>
+
+<button type="submit">Signup</button>
+
+</form>

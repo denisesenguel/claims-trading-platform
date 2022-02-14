@@ -14,7 +14,7 @@ const buyerSchema = new Schema(
     },
     email: {
       type: String,
-      match: ["/^\S+@\S+\.\S+$/", 'Please use a valid email address.'],
+      match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address.'],
       required: [true, "Email is required."],
       unique: true,
       lowercase: true,
