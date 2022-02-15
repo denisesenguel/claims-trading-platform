@@ -1,11 +1,17 @@
-<div class="m-5">
+<div class="m-5 d-flex">
 
-    <h1>Hello, {{firstName}} {{lastName}}! <i class="bi-person-circle really-big-font text-muted p-0"></i> </h1> 
+    <div class="d-flex flex-column justify-content-space-between align-items-space-between">
+        <br>
+        <h1>Hello, {{firstName}} {{lastName}}!</h1>
+        <ul class="text-decoration-none list-unstyled fs-5 mt-5">
+            <li>Affiliation: {{affiliation}}</li>
+            <li>Member since {{createdDate}}</li>
+        </ul>
+    </div>
 
-    <ul class="text-decoration-none list-unstyled fs-5">
-        <li>Affiliation: {{affiliation}}</li>
-        <li>Member since {{createdDate}}</li>
-    </ul>
+    <div>
+        <i class="bi-person-circle really-big-font text-muted p-0 ms-5"></i>
+    </div>
 
 </div>
 
