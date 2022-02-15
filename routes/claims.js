@@ -3,12 +3,15 @@ const Seller = require("./../models/Seller.model");
 const Claim = require("./../models/Claim.model");
 const mongoose = require("mongoose");
 const { format } = require("date-fns");
+const { isLoggedInAsBuyer, isLoggedInAsSeller, isLoggedInAsEither } = require("./../middleware/isLoggedIn");
+const { isLoggedOutAsBuyer, isLoggedOutAsSeller } = require("./../middleware/isLoggedOut");
 
-router.get("/create", (req, res, next)=> {
+
+router.get("/create", isLoggedInAsSeller, (req, res, next)=> {
     res.render("claims/claim-create");
 });
 
-router.post("/create", async (req, res, next)=> {
+router.post("/create", isLoggedInAsSeller, async (req, res, next)=> {
     try {
         // const { debtor, debtorLocation, faceValue, currency, type, minimumPrice, performance, maturity } = req.body;
         req.body.seller = mongoose.Types.ObjectId();
@@ -28,7 +31,7 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-router.get("/:claimId/details", async (req, res, next) => {
+router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
     try {
         const oneClaim = await Claim.findById(req.params.claimId).lean();
         for (let key in oneClaim) {
@@ -40,7 +43,7 @@ router.get("/:claimId/details", async (req, res, next) => {
     }
 });
 
-router.get("/:claimId/edit", async (req, res, next)=> {
+router.get("/:claimId/edit", isLoggedInAsSeller, async (req, res, next)=> {
     try {
         const dbClaim = await Claim.findById(req.params.claimId).lean();
         dbClaim[`${dbClaim.currency}`] = "selected";
@@ -54,7 +57,7 @@ router.get("/:claimId/edit", async (req, res, next)=> {
     }
 });
 
-router.post("/:claimId/edit", async (req, res, next)=> {
+router.post("/:claimId/edit", isLoggedInAsSeller, async (req, res, next)=> {
     try {
         const dbUpdated = await Claim.findByIdAndUpdate(req.params.claimId, req.body, {new: true});
         console.log("dbUpdated: ", dbUpdated);
@@ -64,7 +67,7 @@ router.post("/:claimId/edit", async (req, res, next)=> {
     }
 });
 
-router.get("/:claimId/delete", async (req, res, next) => {
+router.get("/:claimId/delete", isLoggedInAsSeller, async (req, res, next) => {
     try {
         await Claim.findByIdAndDelete(req.params.claimId);
         res.redirect("/claims");

@@ -1,8 +1,18 @@
-module.exports = (req, res, next) => {
-  // if an already logged in user tries to access the login page it
-  // redirects the user to the home page
-  if (req.session.user) {
-    return res.redirect('/');
+isLoggedOutAsBuyer = (req, res, next) => {
+  if(!req.session.buyer) {
+    next();
+  } else {
+    res.redirect("/");
   }
-  next();
-};
+}
+
+isLoggedOutAsSeller = (req, res, next) => {
+  if(!req.session.seller) {
+    next();
+  } else {
+    res.redirect("/");
+  }
+}
+
+
+module.exports = {isLoggedOutAsBuyer, isLoggedOutAsSeller}

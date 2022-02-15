@@ -10,12 +10,14 @@ const saltRounds = 10;
 // Require the User model in order to interact with the database
 const Seller = require("../models/Seller.model");
 const Buyer = require("../models/Buyer.model");
+const { isLoggedOutAsBuyer, isLoggedOutAsSeller } = require("../middleware/isLoggedOut");
+const { isLoggedInAsEither } =  require("../middleware/isLoggedIn");
 
 // Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
 // const isLoggedOut = require("../middleware/isLoggedOut");
 // const isLoggedIn = require("../middleware/isLoggedIn");
 
-router.get("/signup", (req, res) => {
+router.get("/signup", isLoggedOutAsBuyer, isLoggedOutAsSeller, (req, res) => {
   res.render("auth/signup");
 });
 
@@ -91,7 +93,7 @@ router.post("/signup", async (req, res) => {
 });
   
 
-router.get("/login", (req, res) => {
+router.get("/login", isLoggedOutAsBuyer, isLoggedOutAsSeller, (req, res) => {
   res.render("auth/login");
 });
 
@@ -131,7 +133,7 @@ router.post("/login", async (req, res, next) => {
   }        
 });
  
-router.get("/logout", (req, res) => {
+router.get("/logout", isLoggedInAsEither, (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       return res

@@ -16,4 +16,14 @@ isLoggedInAsSeller = (req, res, next) => {
   next();
 };
 
-module.exports = {isLoggedInAsBuyer, isLoggedInAsSeller};
+isLoggedInAsEither = (req, res, next) => {
+  // checks if the user is logged in when trying to access a specific page
+  if (req.session.seller || req.session.buyer) {
+    next();
+  } else {
+    res.redirect("/");
+  }
+  
+};
+
+module.exports = {isLoggedInAsBuyer, isLoggedInAsSeller, isLoggedInAsEither};
