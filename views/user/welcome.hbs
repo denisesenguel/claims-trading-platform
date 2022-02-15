@@ -1,0 +1,17 @@
+<h2>Hello, {{user.firstName}} {{user.lastName}}</h2>
+
+<h3>Your Account Details:</h3>
+<ul>
+    <li>Affiliation: {{user.affiliation}}</li>
+    <li>Member since: {{user.createdDate}}</li>
+</ul>
+
+{{#if user.isSeller}}
+
+<a href="/claims/create"><button>List my first Claim</button></a>
+
+{{else}}
+
+<a href="/claims"><button>Browse all Claims</button></a>
+
+{{/if}}

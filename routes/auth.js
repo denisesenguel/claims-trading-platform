@@ -65,19 +65,10 @@ router.post("/signup", async (req, res) => {
     const newUser = {firstName, lastName, email, passwordHash};
     if (affiliation) newUser.affiliation = affiliation;
   
-    if (role === 'Seller') {
+    const user = (role === 'Seller') ? await Seller.create(newUser) : await Buyer.create(newUser);
+    (role === 'Seller') ? req.session.seller = user : req.session.buyer = user;
   
-      const seller = await Seller.create(newUser);
-      req.session.seller = seller;
-  
-    } else {
-  
-      const buyer = await Buyer.create(newUser);
-      req.session.buyer = buyer;
-  
-    }
-  
-    res.redirect("/");
+    res.redirect(`/user/${user._id}/welcome`);
     
   } catch (error) {
     
