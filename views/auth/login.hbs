@@ -1,0 +1,28 @@
+<h1>Login</h1>
+
+{{#if errorMessage}}  <h2>{{errorMessage}}</h2> {{/if}}
+
+<form action="/auth/login" method="post">
+
+<label>
+    <input type="radio" name="role" value="Buyer">
+    Buy
+</label>
+<label>
+    <input type="radio" name="role" value="Seller">
+    Sell
+</label>
+
+<label>
+    Email
+    <input type="email" name="email">
+</label>
+
+<label>
+    Password
+    <input type="password" name="password">
+</label>
+
+<button type="submit">Login</button>
+
+</form>
