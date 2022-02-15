@@ -1,11 +1,20 @@
-{{> accountDetails user}}
+<div class="m-5">
 
-{{#if user.isSeller}}
+    <h1 class="mb-5">Welcome, {{user.firstName}} {{user.lastName}}.</h1>
 
-<a href="/claims/create"><button>List my first Claim</button></a>
+    <h4 class="mb-5"> Your Signup was successful!</h4>
 
-{{else}}
+    {{#if user.isSeller}}
 
-<a href="/claims"><button>Browse all Claims</button></a>
+    <a href="/claims/create"><button class="btn btn-primary mb-5">List my first Claim</button></a>
 
-{{/if}}
+    {{else}}
+
+    <a href="/claims"><button class="btn btn-primary mb-5">Browse all Claims</button></a>
+
+    {{/if}}
+
+    <br>
+    <a href="/auth/logout"><button class="btn btn-primary mt-5">Logout</button></a>
+
+</div>
