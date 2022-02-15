@@ -21,7 +21,7 @@ isLoggedInAsEither = (req, res, next) => {
   if (req.session.seller || req.session.buyer) {
     next();
   } else {
-    res.redirect("/");
+    res.redirect("/auth/login");
   }
   
 };
