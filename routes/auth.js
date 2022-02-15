@@ -114,7 +114,11 @@ router.post("/login", async (req, res, next) => {
       res.redirect("/user/profile");
     } else {
       req.session.buyer = found;
-      res.redirect("/claims");
+      if (req.session.previousRoute) {
+        res.redirect(req.session.previousRoute);
+      } else {
+        res.redirect("/claims");
+      }
     }
     
   } catch (error) {
