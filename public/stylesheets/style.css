@@ -1,6 +1,7 @@
-body {
-  padding: 50px;
+html, body {
+  margin: 0px;
+  padding: 0px;
   font-family: 'Open Sans', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
 }
 
