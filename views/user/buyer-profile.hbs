@@ -1,2 +1,8 @@
 {{> accountDetails user}}
 
+{{!-- this can be exchanged by claims of interest later on --}}
+<h3>Listed Claims</h3>
+{{#each claims}}
+    {{> claimSummary this}}
+{{/each}}
+

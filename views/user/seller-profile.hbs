@@ -1,1 +1,12 @@
 {{> accountDetails user}}
+
+{{#if claims}}
+    <h2>My Listed Claims</h2>
+    {{#each claims}}
+        {{> claimSummary this}}
+    {{/each}}
+    <a href="/user/my-claims">See more</a>
+{{else}}
+    <p>No claims listed yet.</p>
+    <a href="/claims/create"><button>List claim now</button></a>
+{{/if}}

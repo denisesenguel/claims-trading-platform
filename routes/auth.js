@@ -68,7 +68,7 @@ router.post("/signup", async (req, res) => {
     const user = (role === 'Seller') ? await Seller.create(newUser) : await Buyer.create(newUser);
     (role === 'Seller') ? req.session.seller = user : req.session.buyer = user;
   
-    res.redirect(`/user/${user._id}/welcome`);
+    res.redirect("/user/welcome");
     
   } catch (error) {
     
