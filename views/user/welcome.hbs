@@ -1,10 +1,4 @@
-<h2>Hello, {{user.firstName}} {{user.lastName}}</h2>
-
-<h3>Your Account Details:</h3>
-<ul>
-    <li>Affiliation: {{user.affiliation}}</li>
-    <li>Member since: {{user.createdDate}}</li>
-</ul>
+{{> accountDetails user}}
 
 {{#if user.isSeller}}
 

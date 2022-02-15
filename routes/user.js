@@ -1,11 +1,9 @@
 const { format, parseISO } = require("date-fns");
 const { isLoggedInAsBuyer, isLoggedInAsEither } = require("../middleware/isLoggedIn");
-const Buyer = require("../models/Buyer.model");
-const Seller = require("../models/Seller.model");
 
 const router = require("express").Router();
 
-router.get("/:userId/welcome", isLoggedInAsEither, (req, res, next) => {
+router.get("/welcome", isLoggedInAsEither, (req, res, next) => {
 
     const currentUser = (req.session.seller) ? req.session.seller : req.session.buyer;
     if (req.session.seller) currentUser.isSeller = true;
@@ -14,5 +12,11 @@ router.get("/:userId/welcome", isLoggedInAsEither, (req, res, next) => {
 
     res.render("user/welcome", {user: currentUser});
 });
+
+router.get("/profile", isLoggedInAsEither, (req, res, next) => {
+
+    (req.session.seller) ? res.render("user/seller-profile", {user: req.session.seller}) : res.render("user/buyer-profile", {user: req.session.buyer});
+});
+
 
 module.exports = router;
