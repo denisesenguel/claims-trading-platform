@@ -14,9 +14,9 @@ router.get("/create", isLoggedInAsSeller, (req, res, next)=> {
 router.post("/create", isLoggedInAsSeller, async (req, res, next)=> {
     try {
         // const { debtor, debtorLocation, faceValue, currency, type, minimumPrice, performance, maturity } = req.body;
-        req.body.seller = mongoose.Types.ObjectId();
+        req.body.seller = req.session.seller._id;
         const dbClaim = await Claim.create(req.body);
-        res.redirect("/claims");
+        res.redirect("/user/my-claims");
     } catch (error) {
         console.log(error);
     }

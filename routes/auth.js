@@ -111,11 +111,11 @@ router.post("/login", async (req, res, next) => {
   
     if (role === "Seller") {
       req.session.seller = found;
-      res.send(req.session.seller);
+      res.render("user/seller-profile", {user: req.session.seller});
       // res.redirect(`${/found._id}/profile`);
     } else {
       req.session.buyer = found;
-      res.send(req.session.buyer);
+      res.render("claims/");
     }
     
   } catch (error) {
