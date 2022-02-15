@@ -24,7 +24,8 @@ router.post("/create", isLoggedInAsSeller, async (req, res, next)=> {
 
 router.get("/", async (req, res, next) => {
     try {
-        const allClaims = await Claim.find();
+        const allClaims = await Claim.find().lean();
+        allClaims.forEach(c => c.faceValue = c.faceValue.toLocaleString());
         res.render("claims/claims-overview", {claims: allClaims});
     } catch (error) {
         console.log(error);

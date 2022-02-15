@@ -18,10 +18,12 @@ router.get("/profile", isLoggedInAsEither, async (req, res, next) => {
 
     try {
         if (req.session.seller) {
-            const myClaims = await Claim.find({"seller": req.session.seller._id});
+            const myClaims = await Claim.find({"seller": req.session.seller._id}).lean();
+            myClaims.forEach(c => c.faceValue = c.faceValue.toLocaleString());
             res.render("user/seller-profile", {user: req.session.seller, claims: myClaims});
          } else {
-             const allClaims = await Claim.find();
+             const allClaims = await Claim.find().lean();
+             allClaims.forEach(c => c.faceValue = c.faceValue.toLocaleString());
              res.render("user/buyer-profile", {user: req.session.buyer, claims: allClaims});
          }
     } catch (error) {
