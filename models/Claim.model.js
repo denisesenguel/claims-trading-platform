@@ -28,7 +28,7 @@ const claimSchema = new Schema(
       enum: ['EUR', 'USD', 'GBP'],
       required: true
     },
-    type: {
+    claimType: {
       type: String,
       enum: ['Corporate', 'Consumer', 'Retail Mortgage', 'Commercial Real Estate', 'Trade'],
       required: true

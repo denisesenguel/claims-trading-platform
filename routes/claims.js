@@ -44,7 +44,7 @@ router.get("/:claimId/edit", async (req, res, next)=> {
     try {
         const dbClaim = await Claim.findById(req.params.claimId).lean();
         dbClaim[`${dbClaim.currency}`] = "selected";
-        dbClaim[`${dbClaim.type}`] = "selected";
+        dbClaim[`${dbClaim.claimType}`] = "selected";
         dbClaim[`${dbClaim.performance}`] = "selected";
         dbClaim.maturity = format(dbClaim.maturity, "yyyy-MM-dd");
         console.log("dbClaim: ", dbClaim);

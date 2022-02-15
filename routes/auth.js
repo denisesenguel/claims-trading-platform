@@ -59,19 +59,18 @@ router.post("/signup", async (req, res) => {
   
     const salt = await bcrypt.genSalt(saltRounds);
     const passwordHash = await bcrypt.hash(password, salt);
+    
+    const newUser = {firstName, lastName, email, passwordHash};
+    if (affiliation) newUser.affiliation = affiliation;
   
     if (role === 'Seller') {
   
-      const newSeller = {firstName, lastName, email, passwordHash};
-      if (affiliation) newSeller.affiliation = affiliation;
-      const seller = await Seller.create(newSeller);
+      const seller = await Seller.create(newUser);
       req.session.seller = seller;
   
     } else {
   
-      const newBuyer = {firstName, lastName, email, passwordHash};
-      if (affiliation) newBuyer.affiliation = affiliation;
-      const buyer = await Buyer.create(newBuyer);
+      const buyer = await Buyer.create(newUser);
       req.session.buyer = buyer;
   
     }
