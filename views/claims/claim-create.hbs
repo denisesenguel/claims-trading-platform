@@ -1,6 +1,80 @@
-<h1>List claim</h1>
+<h1>Create claim</h1>
 
-<form action="/claims/create" method="post">
+
+<form class="row-g-3" action="/claims/create" method="post">
+            <div class="col-12">
+                <label class="form-label">Debtor
+                    <input class="form-control" type="text" name="debtor" required>
+                </label>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Debtor country
+                    <input class="form-control" type="text" name="debtorLocation" required>
+                </label>
+            </div>
+            <div class="col-12">
+                <label class="form-label">faceValue
+                    <input class="form-control" type="number" name="faceValue" required>
+                </label>
+            </div>
+            <div class="col-12">
+                <select class="form-select" name="currency">
+                    <option value="EUR">EUR</option>
+                    <option value="USD">USD</option>
+                    <option value="GBP">GBP</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <select class="form-select" name="claimType">
+                    <option value="Corporate">Corporate</option>
+                    <option value="Consumer">Consumer</option>
+                    <option value="Retail Mortgage">Retail Mortgage</option>
+                    <option value="Commercial Real Estate">Commercial Real Estate</option>
+                    <option value="Trade">Trade</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <label class="form-label">Minimum Price
+                    <input class="form-control" type="number" name="minimumPrice" required>
+                </label>
+            </div>
+             <div class="col-12">
+                <label class="form-label"> Performance
+                    <select class="form-select" name="performance">
+                        <option value="performing">Performing</option>
+                        <option value="defaulted">Defaulted</option>
+                        <option value="stressed">Stressed</option>
+                    </select>
+                </label>
+            </div>
+             <div class="col-12">
+                <label class="form-label">Due Date
+                    <input class="form-control" type="date" name="maturity">
+                </label>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Publish claim</button>
+            </div>
+        </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{!-- <form action="/claims/create" method="post">
 <label for="debtor">Debtor</label>
     <input type="text" name="debtor">
 <label for="debtorLocation">Debtor Location</label>
@@ -34,4 +108,4 @@
     <input type="date" name="maturity">
 
 <button type="submit">Publish claim</button>
-</form>
+</form> --}}

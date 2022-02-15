@@ -1,6 +1,24 @@
+ /* LANDING PAGE */
+
+ * {
+   /* outline: 1px red solid; */
+ }
+
+ #landing-page-main-container {
+   height: 90vh;
+ }
+
+ #lp-main-title {
+   text-align: center;
+ }
+
+ #lp-sub-title {
+   text-align: center;
+   width: 40%;
+   margin: 30px;
+ }
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
