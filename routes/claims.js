@@ -4,6 +4,12 @@ const Seller = require("./../models/Seller.model");
 const Claim = require("./../models/Claim.model");
 const mongoose = require("mongoose");
 const { format } = require("date-fns");
+const lodash = require("lodash");
+const hbs = require("handlebars");
+hbs.registerHelper('startCase', function (string) { 
+ return lodash.startCase(string);
+});
+
 const { isLoggedInAsBuyer, isLoggedInAsSeller, isLoggedInAsEither } = require("./../middleware/isLoggedIn");
 const { isLoggedOutAsBuyer, isLoggedOutAsSeller } = require("./../middleware/isLoggedOut");
 
@@ -37,11 +43,16 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
     try {
-        const oneClaim = await Claim.findById(req.params.claimId).lean();
+        let oneClaim = await Claim.findById(req.params.claimId).populate("seller").lean();
         for (let key in oneClaim) {
             if (key.startsWith("_") || key == 'createdAt' || key == 'updatedAt') delete oneClaim[key]; 
         }
-        res.render("claims/claim-details", {claim: oneClaim, id: req.params.claimId});
+        if (req.session.seller) {
+            oneClaim.isEditable = (oneClaim.seller._id.toString() === req.session.seller._id) || null;
+        }
+        oneClaim.maturity = format(oneClaim.maturity, "L LLLL yyyy");
+        console.log("claim: ", {claim: oneClaim, claimId: req.params.claimId}, "req.session: ", req.session)
+        res.render("claims/claim-details", {claim: oneClaim, claimId: req.params.claimId});
     } catch (error) {
         console.log(error);
     }
@@ -49,9 +60,9 @@ router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
 
 router.get("/:claimId/:sellerId/details", async (req, res, next) => {
     try {
+        console.log("REQ PARAMS: ", req.params.sellerId);
         const dbSeller = await Seller.findById(req.params.sellerId).populate("listedClaims");
         dbSeller.claimId = req.params.claimId;
-        // res.send({seller: dbSeller});
         res.render("claims/claim-seller-details", {seller: dbSeller});
     } catch (error) {
         console.log(error);

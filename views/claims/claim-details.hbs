@@ -4,28 +4,27 @@
         <div class="col">
             <h2 class="mb-4">Claim Details</h2>
 
-            <table class="table w-75">
+            <table class="table table-hover w-75">
                 <tbody>
                     {{#each claim}}
-                    <tr>
-                        <td>{{@key}}</td>
-                        <td>{{this}}</td>
+                    {{#unless @last}}
+                    <tr>   
+                        <th>{{startCase @key}}:</th> 
                         {{#if @first}}
-                            <td>
-                                <a href="/claims/{{id}}/{{claim.seller}}/details">
-                                    <button class="btn btn-primary btn-sm">Seller Details</button>
-                                </a>
-                            </td>
+                        <td>{{this.firstName}} {{this.lastName}}{{#if this.affiliation}}, {{this.affiliation}}{{/if}}</td>
                         {{else}}
-                            <td></td>
+                        <td>{{this}}</td>
                         {{/if}}
                     </tr>
+                    {{/unless}}
                     {{/each}}
                 </tbody>
             </table>
-            <a href="/claims/{{id}}/edit"><button class="btn btn-primary mt-5">Edit</button></a>
-            <a href="/claims/{{id}}/delete"><button class="btn btn-primary mt-5">Delete</button></a>
-           
+            {{#if claim.isEditable}}
+                        <a href="/claims/{{claimId}}/edit"><button class="btn btn-primary mt-3">Edit</button></a>
+                        <a href="/claims/{{claimId}}/delete"><button class="btn btn-primary mt-3 ml-2 mr-5">Delete</button></a>
+                {{/if}}
+            <a href="/claims/{{claimId}}/{{claim.seller._id}}/details"><button class="btn btn-primary mt-3">View Seller Details</button></a>
         </div>
     </div>
 </div>
