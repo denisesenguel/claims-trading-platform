@@ -33,7 +33,6 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-
 router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
     try {
         const oneClaim = await Claim.findById(req.params.claimId).lean();

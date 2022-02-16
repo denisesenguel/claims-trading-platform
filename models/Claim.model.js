@@ -40,7 +40,7 @@ const claimSchema = new Schema(
     },
     performance: {
       type: String,
-      enum: ['performing', 'defaulted', 'stressed']
+      enum: ['Performing', 'Defaulted', 'Stressed']
     },
     maturity: {
       type: Date,

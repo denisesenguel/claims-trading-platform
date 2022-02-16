@@ -20,14 +20,13 @@
     </div>
     <div class="row">
 
-        {{#each seller.listedClaims}}
-            <div class="card">
-            <div class="card-body">
-                <p>{{this.claimType}}</p>
-                <p>{{this.currency}} {{this.faceValue}}</p>
-                <a href="/claims/{{this._id}}/details">View Details</a>
-            </div>
-        </div>
-        {{/each}}
-    </div>
+
+    <h1 class="m-2 mb-4">Other listed claims</h1>
+
+<div class="m-2">
+    {{#each seller.listedClaims}}
+
+        {{> claimSummary this}}
+
+    {{/each}}
 </div>
