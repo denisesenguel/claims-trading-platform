@@ -94,7 +94,14 @@ router.post("/signup", async (req, res) => {
   
 
 router.get("/login", isLoggedOutAsBuyer, isLoggedOutAsSeller, (req, res) => {
-  res.render("auth/login");
+  if (req.query.role === "buyer") {
+    res.render("auth/login", {buyer: "checked"});
+  } else if (req.query.role === "seller"){
+    res.render("auth/login", {seller: "checked"});
+  } else {
+    res.render("auth/login");
+  }
+  
 });
 
 router.post("/login", async (req, res, next) => {
@@ -120,16 +127,18 @@ router.post("/login", async (req, res, next) => {
   
     if (role === "Seller") {
       req.session.seller = found;
-      res.send(req.session.seller);
+      // res.send(req.session.seller);
+      res.redirect("/claims");
       // res.redirect(`${/found._id}/profile`);
     } else {
       req.session.buyer = found;
-      res.send(req.session.buyer);
+      // res.send(req.session.buyer);
+      res.redirect("/claims");
     }
     
   } catch (error) {
     console.log(error);
-    next(err);
+    next(error);
   }        
 });
  

@@ -43,6 +43,16 @@ router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
     }
 });
 
+router.get("/:claimId/:sellerId/details", async (req, res, next) => {
+    try {
+        const dbSeller = await Seller.findById(req.params.sellerId).populate("listedClaims");
+        dbSeller.claimId = req.params.claimId;
+        res.render("claims/claim-seller-details", {seller: dbSeller});
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 router.get("/:claimId/edit", isLoggedInAsSeller, async (req, res, next)=> {
     try {
         const dbClaim = await Claim.findById(req.params.claimId).lean();

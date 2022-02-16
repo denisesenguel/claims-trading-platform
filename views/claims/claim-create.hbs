@@ -1,6 +1,92 @@
-<h1>List claim</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 d-flex flex-row justify-content-center mt-5">
+            <div> 
+            <h1 class="my-4">Create claim</h1>
+            <form class="row-g-3" action="/claims/create" method="post">
+                        <div class="col-12">
+                            <label class="form-label">Debtor
+                                <input class="form-control" type="text" name="debtor" required>
+                            </label>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Debtor country
+                                <input class="form-control" type="text" name="debtorLocation" required>
+                            </label>
+                        </div>
+                        <div class="col-12 d-flex flex-row">
+                            <div>
+                                <label class="form-label">Currency
+                                    <select class="form-select" name="currency">
+                                        <option value="EUR">EUR</option>
+                                        <option value="USD">USD</option>
+                                        <option value="GBP">GBP</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="mx-2">
+                                <label class="form-label">Face Value
+                                    <input class="form-control" type="number" min="0" name="faceValue" required>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Claim Type
+                                <select class="form-select" name="claimType">
+                                    <option value="Corporate">Corporate</option>
+                                    <option value="Consumer">Consumer</option>
+                                    <option value="Retail Mortgage">Retail Mortgage</option>
+                                    <option value="Commercial Real Estate">Commercial Real Estate</option>
+                                    <option value="Trade">Trade</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Minimum Price (% of Face Value)
+                                <input class="form-control" type="number" min="0" max="100" name="minimumPrice" required>
+                            </label>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label"> Performance
+                                <select class="form-select" name="performance">
+                                    <option value="performing">Performing</option>
+                                    <option value="defaulted">Defaulted</option>
+                                    <option value="stressed">Stressed</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Due Date
+                                <input class="form-control" type="date" name="maturity">
+                            </label>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary my-3">Publish claim</button>
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </div>  
+</div>
 
-<form action="/claims/create" method="post">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{!-- <form action="/claims/create" method="post">
 <label for="debtor">Debtor</label>
     <input type="text" name="debtor">
 <label for="debtorLocation">Debtor Location</label>
@@ -34,4 +120,4 @@
     <input type="date" name="maturity">
 
 <button type="submit">Publish claim</button>
-</form>
+</form> --}}
