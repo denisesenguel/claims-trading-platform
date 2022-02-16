@@ -1,20 +1,22 @@
 <div class="m-5">
 
-    {{> accountDetails user}}
+    <div class="ms-5">
+        {{> accountDetails user}}
 
-    <h4 class="mb-5"> Your Signup was successful!</h4>
+        <h4 class="mb-5"> Your Signup was successful!</h4>
 
-    {{#if user.isSeller}}
+        {{#if user.isSeller}}
 
-    <a href="/claims/create"><button class="btn btn-primary mb-5">List my first Claim</button></a>
+        <a href="/claims/create"><button class="btn btn-primary mb-5">List my first Claim</button></a>
 
-    {{else}}
+        {{else}}
 
-    <a href="/claims"><button class="btn btn-primary mb-5">Browse all Claims</button></a>
+        <a href="/claims"><button class="btn btn-primary mb-5">Browse all Claims</button></a>
 
-    {{/if}}
+        {{/if}}
 
-    <br>
-    <a href="/auth/logout"><button class="btn btn-primary mt-5">Logout</button></a>
+        <br>
+        <a href="/auth/logout"><button class="btn btn-primary mt-5">Logout</button></a>
+    </div>
 
 </div>
