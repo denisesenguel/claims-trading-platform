@@ -20,7 +20,7 @@ isLoggedOutAsSeller = (req, res, next) => {
       if (req.query.role === "buyer") {
         res.render("index", {errorMessage: "You are still logged in as seller. You need to logout first before you can login or signup as buyer"});
       } else if (req.query.role === "seller") {
-        res.redirect("/claims/create");
+        res.redirect("/user/profile");
         return;
     } else {
       res.redirect("/claims");

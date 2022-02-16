@@ -17,6 +17,8 @@ router.post("/create", isLoggedInAsSeller, async (req, res, next)=> {
         // const { debtor, debtorLocation, faceValue, currency, type, minimumPrice, performance, maturity } = req.body;
         req.body.seller = req.session.seller._id;
         const dbClaim = await Claim.create(req.body);
+        const updatedSeller = await Seller.findByIdAndUpdate(req.session.seller._id, {$push: {listedClaims: dbClaim._id}}, {new: true});
+        console.log("UPDATED SELLER: ", updatedSeller);
         res.redirect("/claims");
     } catch (error) {
         console.log(error);
@@ -49,6 +51,7 @@ router.get("/:claimId/:sellerId/details", async (req, res, next) => {
     try {
         const dbSeller = await Seller.findById(req.params.sellerId).populate("listedClaims");
         dbSeller.claimId = req.params.claimId;
+        // res.send({seller: dbSeller});
         res.render("claims/claim-seller-details", {seller: dbSeller});
     } catch (error) {
         console.log(error);
