@@ -1,3 +1,4 @@
+
 const router = require("express").Router();
 const Seller = require("./../models/Seller.model");
 const Claim = require("./../models/Claim.model");
@@ -24,12 +25,14 @@ router.post("/create", isLoggedInAsSeller, async (req, res, next)=> {
 
 router.get("/", async (req, res, next) => {
     try {
-        const allClaims = await Claim.find();
+        const allClaims = await Claim.find().lean();
+        allClaims.forEach(c => c.faceValue = c.faceValue.toLocaleString());
         res.render("claims/claims-overview", {claims: allClaims});
     } catch (error) {
         console.log(error);
     }
 });
+
 
 router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
     try {
@@ -45,13 +48,13 @@ router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
 
 router.get("/:claimId/:sellerId/details", async (req, res, next) => {
     try {
-        const dbSeller = await Seller.findById(req.params.sellerId).populate("listedClaims").lean();
+        const dbSeller = await Seller.findById(req.params.sellerId).populate("listedClaims");
         dbSeller.claimId = req.params.claimId;
         res.render("claims/claim-seller-details", {seller: dbSeller});
     } catch (error) {
         console.log(error);
     }
-})
+});
 
 router.get("/:claimId/edit", isLoggedInAsSeller, async (req, res, next)=> {
     try {
@@ -85,5 +88,6 @@ router.get("/:claimId/delete", isLoggedInAsSeller, async (req, res, next) => {
         console.log(error);
     }
 });
+
 
 module.exports = router;
