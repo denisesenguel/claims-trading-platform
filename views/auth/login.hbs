@@ -1,40 +1,46 @@
-<div class="container">
-    <div class="row d-flex flex-row justify-content-center">
-        <h1>Login</h1>
-    </div>
-    <div class="row d-flex flex-row justify-content-center">
-        <form action="/auth/login" method="post" "d-flex flex-column align-items-center">
-            <div class="form-check form-check-inline">
-                <label class="form-check-label">Buyer
-                <input class="form-check-input" type="radio" name="role" value="Buyer" {{#if buyer}} {{buyer}} {{/if}}>
-                </label>
-                </div>
-                <div class="form-check form-check-inline">
-                <label class="form-check-label">Seller
-                    <input class="form-check-input" type="radio" name="role" value="Seller" {{#if seller}} {{seller}} {{/if}}>
-                </label>
+<div class="container-fluid">
+    <div class="row h-25"></div>
+        <div class="col-3 w-25"></div>
+        <div class="col-6">
+            <div class="d-flex flex-row justify-content-center m-5">
+                <h1>Login</h1>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Email
-                    <input type="text" class="form-control" type="email" name="email">
-                </label>
-                </div>
-                <div class="mb-3">
-                <label class="form-label">Password
-                    <input class="form-control" type="password" name="password">
-                </label>
+            <div class="d-flex flex-row justify-content-center mx-auto">
+                <form action="/auth/login" method="post" "d-flex flex-column align-items-center mx-auto">
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">Buyer
+                        <input class="form-check-input" type="radio" name="role" value="Buyer" {{#if buyer}} {{buyer}} {{/if}}>
+                        </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                        <label class="form-check-label">Seller
+                            <input class="form-check-input" type="radio" name="role" value="Seller" {{#if seller}} {{seller}} {{/if}}>
+                        </label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email
+                            <input type="text" class="form-control" type="email" name="email">
+                        </label>
+                        </div>
+                        <div class="mb-3">
+                        <label class="form-label">Password
+                            <input class="form-control" type="password" name="password">
+                        </label>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Log me in!</button>
+                </form>
             </div>
-            <button class="btn btn-primary" type="submit">Log me in!</button>
-        </form>
+            <div class="row">
+                <p>Don't have an account yet? Register <a href="/auth/signup">here</a></p>
+            </div>
+        </div>
+        <div class="row">
+        {{#if errorMessage}} 
+            <div class="alert alert-danger" role="alert">
+                {{errorMessage}}
+            </div>
+        {{/if}}
     </div>
-    <div class="row">
-        <p>Don't have an account yet? Register <a href="/auth/signup">here</a></p>
-    </div>
+    <div class="col3 w-25"></div>
 </div>
-
-{{#if errorMessage}} 
-<div class="alert alert-danger" role="alert">
-    {{errorMessage}}
-</div>
-{{/if}}
 
