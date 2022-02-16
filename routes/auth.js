@@ -1,3 +1,4 @@
+
 const router = require("express").Router();
 
 // ℹ️ Handles password encryption
@@ -65,19 +66,10 @@ router.post("/signup", async (req, res) => {
     const newUser = {firstName, lastName, email, passwordHash};
     if (affiliation) newUser.affiliation = affiliation;
   
-    if (role === 'Seller') {
+    const user = (role === 'Seller') ? await Seller.create(newUser) : await Buyer.create(newUser);
+    (role === 'Seller') ? req.session.seller = user : req.session.buyer = user;
   
-      const seller = await Seller.create(newUser);
-      req.session.seller = seller;
-  
-    } else {
-  
-      const buyer = await Buyer.create(newUser);
-      req.session.buyer = buyer;
-  
-    }
-  
-    res.redirect("/");
+    res.redirect("/user/welcome");
     
   } catch (error) {
     
@@ -94,14 +86,7 @@ router.post("/signup", async (req, res) => {
   
 
 router.get("/login", isLoggedOutAsBuyer, isLoggedOutAsSeller, (req, res) => {
-  if (req.query.role === "buyer") {
-    res.render("auth/login", {buyer: "checked"});
-  } else if (req.query.role === "seller"){
-    res.render("auth/login", {seller: "checked"});
-  } else {
-    res.render("auth/login");
-  }
-  
+  res.render("auth/login");
 });
 
 router.post("/login", async (req, res, next) => {
@@ -127,13 +112,14 @@ router.post("/login", async (req, res, next) => {
   
     if (role === "Seller") {
       req.session.seller = found;
-      // res.send(req.session.seller);
-      res.redirect("/claims");
-      // res.redirect(`${/found._id}/profile`);
+      res.redirect("/user/profile");
     } else {
       req.session.buyer = found;
-      // res.send(req.session.buyer);
-      res.redirect("/claims");
+      if (req.session.previousRoute) {
+        res.redirect(req.session.previousRoute);
+      } else {
+        res.redirect("/claims");
+      }
     }
     
   } catch (error) {
@@ -154,3 +140,4 @@ router.get("/logout", isLoggedInAsEither, (req, res) => {
 });
 
 module.exports = router;
+

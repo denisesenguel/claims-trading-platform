@@ -1,3 +1,4 @@
+
 isLoggedInAsBuyer = (req, res, next) => {
   // checks if the user is logged in when trying to access a specific page
   if (!req.session.buyer) {
@@ -21,9 +22,11 @@ isLoggedInAsEither = (req, res, next) => {
   if (req.session.seller || req.session.buyer) {
     next();
   } else {
-    res.redirect("/");
+    req.session.previousRoute = req.originalUrl;
+    res.redirect("/auth/login");
   }
   
 };
+
 
 module.exports = {isLoggedInAsBuyer, isLoggedInAsSeller, isLoggedInAsEither};

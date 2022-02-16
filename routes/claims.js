@@ -1,3 +1,4 @@
+
 const router = require("express").Router();
 const Seller = require("./../models/Seller.model");
 const Claim = require("./../models/Claim.model");
@@ -24,12 +25,14 @@ router.post("/create", isLoggedInAsSeller, async (req, res, next)=> {
 
 router.get("/", async (req, res, next) => {
     try {
-        const allClaims = await Claim.find();
+        const allClaims = await Claim.find().lean();
+        allClaims.forEach(c => c.faceValue = c.faceValue.toLocaleString());
         res.render("claims/claims-overview", {claims: allClaims});
     } catch (error) {
         console.log(error);
     }
 });
+
 
 router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
     try {
@@ -85,5 +88,6 @@ router.get("/:claimId/delete", isLoggedInAsSeller, async (req, res, next) => {
         console.log(error);
     }
 });
+
 
 module.exports = router;
