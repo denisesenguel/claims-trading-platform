@@ -84,9 +84,15 @@ router.post("/signup", async (req, res) => {
   }
 });
   
-
 router.get("/login", isLoggedOutAsBuyer, isLoggedOutAsSeller, (req, res) => {
-  res.render("auth/login");
+  if (req.query.role === "buyer") {
+    res.render("auth/login", {buyer: "checked"});
+  } else if (req.query.role === "seller"){
+    res.render("auth/login", {seller: "checked"});
+  } else {
+    res.render("auth/login");
+  }
+  
 });
 
 router.post("/login", async (req, res, next) => {
