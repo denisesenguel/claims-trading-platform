@@ -1,66 +1,60 @@
-<div class="container-fluid">
-    <div class="row">
-        {{!-- <div class="col-3"></div> --}}
-        <div class="col-12 d-flex flex-column align-items-center">
-            <div class="mt-5">
-                <h1 class="mt-5 mb-4">Signup</h1>
-                <form action="/auth/signup" method="post">
-                    <div class="form-check form-check-inline">
-                        <label class="form-check-label">Buy
-                            <input class="form-check-input" type="radio" name="role" value="Buyer" {{#if buyer}} {{buyer}} {{/if}}>
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <label class="form-check-label">Sell
-                            <input class="form-check-input" type="radio" name="role" value="Seller" {{#if seller}} {{seller}} {{/if}}>
-                        </label>
-                    </div>   
-                    <div>
-                        <label class="form-label">First name
-                            <input class="form-control" type="text" name="firstName" required>
-                        </label>
-                    <div>
-                        <label class="form-label">Last name
-                            <input class="form-control" type="text" name="lastName" required>
-                        </label>
-                    </div>
-                    <div class="w-100">
-                        <label class="form-label">Affiliation
-                            <input class="form-control w-100" type="text" name="affiliation" required>
-                        </label>
-                    </div>
-                    <div>
-                        <label class="form-label">Email
-                            <input class="form-control" type="email" name="email" required>
-                        </label>
-                    </div>
-                    <div>
-                        <label class="form-label">Password
-                            <input class="form-control" type="password" name="password" required>
-                        </label>
-                    </div>
-                    <div>
-                        <div class="form-check">
-                        <label class="form-check-label">
-                            <input class="form-check-input text-start" type="checkbox">
-                        Remember me
-                        </label>
-                        </div>
-                    </div>
-                    <div>
-                        <button type="submit" class="btn btn-primary my-3">Create an account</button>
-                    </div>
-                </form>
-                <div class="row">
-                    <p class="my-3">Already have an account? Login <a href="/auth/login">here</a></p>
-                </div>
-            {{#if errorMessage}} 
-                <div class="alert alert-danger" role="alert">
-                    {{errorMessage}}
-                </div>
-            {{/if}}
+<div class="d-flex flex-column align-items-center vh-100 vw-100">
+    <h1 class="mb-4">Signup</h1>
+    <div class="w-50">
+        
+        <form action="/auth/signup" method="post" class="w-100">
+
+            <div class="form-check form-check-inline w-100 d-flex justify-content-center align-items-center">
+                <label class="form-check-label m-3">Buyer
+                    <input class="form-check-input" type="radio" name="role" value="Buyer" {{#if buyer}} {{buyer}} {{/if}}>
+                </label>
+                <label class="form-check-label m-3">Seller
+                    <input class="form-check-input" type="radio" name="role" value="Seller" {{#if seller}} {{seller}} {{/if}}>
+                </label>
             </div>
+
+            <div class="w-100 d-flex justify-content-center align-items-center">
+                <label class="form-label w-50">First name
+                    <input class="form-control w-100" type="text" name="firstName" required>
+                </label>
+                <label class="form-label w-50">Last name
+                    <input class="form-control w-100" type="text" name="lastName" required>
+                </label>
+            </div>
+
+            <label class="form-label w-100">Affiliation
+                <input class="form-control w-100" type="text" name="affiliation" required>
+            </label>
+
+            <label class="form-label w-100">Email
+                <input class="form-control w-100" type="email" name="email" required>
+            </label>
+
+            <label class="form-label w-100">Password
+                <input class="form-control w-100" type="password" name="password" required>
+            </label>
+
+            <div class="form-check w-100">
+                <label class="form-check-label w-100">
+                    <input class="form-check-input text-start" type="checkbox">
+                    Remember me
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">Create an account</button>
+            </div>
+        </form>
+
+        <div>
+            <p class="text-muted m-3">Already have an account? Login <a href="/auth/login">here</a></p>
         </div>
+        
+        {{#if errorMessage}} 
+            <div class="alert alert-danger" role="alert">
+                {{errorMessage}}
+            </div>
+        {{/if}}
+
     </div>
 </div>
 
