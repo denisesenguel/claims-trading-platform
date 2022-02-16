@@ -1,28 +1,39 @@
-<h1>Login</h1>
+<div class="container-fluid">
+   <div class="row mt-5">
+        <div class="col-12 d-flex flex-column align-items-center mt-5">
+            <div>
+                <h1 class="mt-5 mb-4">Login</h1>
+                <form action="/auth/login" method="post" "d-flex flex-column align-items-center mx-auto">
+                    <div class="form-check form-check-inline mb-3">
+                        <label class="form-check-label">Buyer
+                        <input class="form-check-input" type="radio" name="role" value="Buyer" {{#if buyer}} {{buyer}} {{/if}}>
+                        </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                        <label class="form-check-label">Seller
+                            <input class="form-check-input" type="radio" name="role" value="Seller" {{#if seller}} {{seller}} {{/if}}>
+                        </label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email
+                            <input type="text" class="form-control" type="email" name="email">
+                        </label>
+                        </div>
+                        <div class="mb-3">
+                        <label class="form-label">Password
+                            <input class="form-control" type="password" name="password">
+                        </label>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Log me in!</button>
+                </form>
+                <p class="my-4" >Don't have an account yet? Register <a href="/auth/signup">here</a></p>
+                {{#if errorMessage}} 
+                    <div class="alert alert-danger" role="alert">
+                        {{errorMessage}}
+                    </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
 
-{{#if errorMessage}}  <h2>{{errorMessage}}</h2> {{/if}}
-
-<form action="/auth/login" method="post">
-
-<label>
-    <input type="radio" name="role" value="Buyer">
-    Buy
-</label>
-<label>
-    <input type="radio" name="role" value="Seller">
-    Sell
-</label>
-
-<label>
-    Email
-    <input type="email" name="email">
-</label>
-
-<label>
-    Password
-    <input type="password" name="password">
-</label>
-
-<button type="submit">Login</button>
-
-</form>

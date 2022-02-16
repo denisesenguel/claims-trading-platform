@@ -1,3 +1,4 @@
+
 const router = require("express").Router();
 
 // ℹ️ Handles password encryption
@@ -139,3 +140,4 @@ router.get("/logout", isLoggedInAsEither, (req, res) => {
 });
 
 module.exports = router;
+

@@ -1,3 +1,4 @@
+
 isLoggedInAsBuyer = (req, res, next) => {
   // checks if the user is logged in when trying to access a specific page
   if (!req.session.buyer) {
@@ -26,5 +27,6 @@ isLoggedInAsEither = (req, res, next) => {
   }
   
 };
+
 
 module.exports = {isLoggedInAsBuyer, isLoggedInAsSeller, isLoggedInAsEither};

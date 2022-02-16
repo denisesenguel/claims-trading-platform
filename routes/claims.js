@@ -1,3 +1,4 @@
+
 const router = require("express").Router();
 const Seller = require("./../models/Seller.model");
 const Claim = require("./../models/Claim.model");
@@ -14,9 +15,9 @@ router.get("/create", isLoggedInAsSeller, (req, res, next)=> {
 router.post("/create", isLoggedInAsSeller, async (req, res, next)=> {
     try {
         // const { debtor, debtorLocation, faceValue, currency, type, minimumPrice, performance, maturity } = req.body;
-        req.body.seller = req.session.seller._id;
+        req.body.seller = mongoose.Types.ObjectId();
         const dbClaim = await Claim.create(req.body);
-        res.redirect("/user/my-claims");
+        res.redirect("/claims");
     } catch (error) {
         console.log(error);
     }
@@ -32,6 +33,7 @@ router.get("/", async (req, res, next) => {
     }
 });
 
+
 router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
     try {
         const oneClaim = await Claim.findById(req.params.claimId).lean();
@@ -39,6 +41,16 @@ router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
             if (key.startsWith("_") || key == 'createdAt' || key == 'updatedAt') delete oneClaim[key]; 
         }
         res.render("claims/claim-details", {claim: oneClaim, id: req.params.claimId});
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+router.get("/:claimId/:sellerId/details", async (req, res, next) => {
+    try {
+        const dbSeller = await Seller.findById(req.params.sellerId).populate("listedClaims");
+        dbSeller.claimId = req.params.claimId;
+        res.render("claims/claim-seller-details", {seller: dbSeller});
     } catch (error) {
         console.log(error);
     }
@@ -76,5 +88,6 @@ router.get("/:claimId/delete", isLoggedInAsSeller, async (req, res, next) => {
         console.log(error);
     }
 });
+
 
 module.exports = router;
