@@ -47,7 +47,10 @@ router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
         for (let key in oneClaim) {
             if (key.startsWith("_") || key == 'createdAt' || key == 'updatedAt') delete oneClaim[key]; 
         }
-        res.render("claims/claim-details", {claim: oneClaim, id: req.params.claimId, sellerID});
+
+        const isSeller = (req.session.seller && req.session.seller._id == sellerID) ?  true : undefined;
+
+        res.render("claims/claim-details", {claim: oneClaim, id: req.params.claimId, sellerID, isSeller});
     } catch (error) {
         console.log(error);
     }
