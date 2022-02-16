@@ -16,10 +16,10 @@ async function generateClaims() {
         object = {};
         object.seller = await getRandomSeller(numberOfSellers);
         object.debtor = debtor;
-        object.debtorLocation = chance.country({full: true});
-        // object.faceValue = ;
-        object.currency = await getCurrency(object.debtorLocation) || "USD";
         object.type = type;
+        object.debtorLocation = chance.country({full: true});
+        object.faceValue = getFaceValue(type);
+        object.currency = await getCurrency(object.debtorLocation) || "USD";
         // object.minimumPrice = ;
         // object.performance = ;
         // object.maturity = ;
@@ -66,6 +66,68 @@ async function getCurrency (debtorCountry) {
     })
     return currency;
 }
+
+function getFaceValue(type) {
+
+    console.log("TYPE: ", type)
+
+    let min, range, roundedTo;
+
+    switch(type) {
+        case "Corporate Loan":
+            min = 50000;
+            range = 250000000;
+            break;
+        case "Consumer Debt":
+            min = 500;
+            range = 50000;
+            break;
+        case "Retail Mortage":
+            min = 75000;
+            max = 10000000;
+            break;
+        case "Commercial Real Estate Loan":
+            min = 100000;
+            max = 500000000;
+            break;
+        case "Trade Claim":
+            min= 500;
+            range = 10000000;
+            break;
+        default:
+            min = 1000;
+            range = 1000000;
+            break;
+    }
+    console.log("MIN, RANGE: ", min,range);
+
+    const randomValue = Math.random()*range + min;
+
+    console.log("RANDOM VALUE: ", randomValue);
+
+    if (randomValue < 1000) {
+        roundedTo = 10;
+    } else if (randomValue >= 1000 && randomValue < 10000) {
+        roundedTo = 100;
+    } else if (randomValue >= 10000 && randomValue < 100000) {
+        roundedTo = 1000;
+    } else if (randomValue >= 100000 && randomValue < 1000000) {
+        roundedTo = 10000;
+    } else if (randomValue >= 1000000 && randomValue < 10000000) {
+        roundedTo = 100000;
+    } else if (randomValue >= 10000000 && randomValue < 100000000) {
+        roundedTo = 1000000;
+    }
+
+    console.log("ROUNDED TO: ", roundedTo);
+
+    faceValue = (Math.floor(randomValue / roundedTo))*roundedTo;
+
+    console.log("FACE VALUE: ", faceValue);
+
+    return faceValue;
+}
+
 
 generateClaims();
 
