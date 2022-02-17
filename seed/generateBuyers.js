@@ -1,5 +1,6 @@
 const Chance = require("chance");
 const bcrypt = require("bcrypt");
+const { Mongoose } = require("mongoose");
 const chance = new Chance();
 const saltRounds = 10;
 const password = "123456Aa";
