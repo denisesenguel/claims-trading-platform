@@ -3,7 +3,13 @@ const router = require("express").Router();
 const Seller = require("./../models/Seller.model");
 const Claim = require("./../models/Claim.model");
 const mongoose = require("mongoose");
-const { format, parseISO } = require("date-fns");
+const { format } = require("date-fns");
+const lodash = require("lodash");
+const hbs = require("handlebars");
+hbs.registerHelper('startCase', function (string) { 
+ return lodash.startCase(string);
+});
+
 const { isLoggedInAsBuyer, isLoggedInAsSeller, isLoggedInAsEither } = require("./../middleware/isLoggedIn");
 const { isLoggedOutAsBuyer, isLoggedOutAsSeller } = require("./../middleware/isLoggedOut");
 
@@ -15,8 +21,10 @@ router.get("/create", isLoggedInAsSeller, (req, res, next)=> {
 router.post("/create", isLoggedInAsSeller, async (req, res, next)=> {
     try {
         // const { debtor, debtorLocation, faceValue, currency, type, minimumPrice, performance, maturity } = req.body;
-        req.body.seller = mongoose.Types.ObjectId();
+        req.body.seller = req.session.seller._id;
         const dbClaim = await Claim.create(req.body);
+        const updatedSeller = await Seller.findByIdAndUpdate(req.session.seller._id, {$push: {listedClaims: dbClaim._id}}, {new: true});
+        console.log("UPDATED SELLER: ", updatedSeller);
         res.redirect("/claims");
     } catch (error) {
         console.log(error);
@@ -33,24 +41,18 @@ router.get("/", async (req, res, next) => {
     }
 });
 
-
 router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
     try {
-        const oneClaim = await Claim.findById(req.params.claimId).populate("seller").lean();
-        
-        sellerID = oneClaim.seller._id;
-
-        oneClaim.seller = oneClaim.seller.firstName + " " + oneClaim.seller.lastName + ", " + oneClaim.seller.affiliation;
-        oneClaim.faceValue = oneClaim.faceValue.toLocaleString();
-        oneClaim.maturity = format(oneClaim.maturity, 'dd.MM.yyyy');
-        
+        let oneClaim = await Claim.findById(req.params.claimId).populate("seller").lean();
         for (let key in oneClaim) {
             if (key.startsWith("_") || key == 'createdAt' || key == 'updatedAt') delete oneClaim[key]; 
         }
-
-        const isSeller = (req.session.seller && req.session.seller._id == sellerID) ?  true : undefined;
-
-        res.render("claims/claim-details", {claim: oneClaim, id: req.params.claimId, sellerID, isSeller});
+        if (req.session.seller) {
+            oneClaim.isEditable = (oneClaim.seller._id.toString() === req.session.seller._id) || null;
+        }
+        oneClaim.maturity = format(oneClaim.maturity, "L LLLL yyyy");
+        console.log("claim: ", {claim: oneClaim, claimId: req.params.claimId}, "req.session: ", req.session)
+        res.render("claims/claim-details", {claim: oneClaim, claimId: req.params.claimId});
     } catch (error) {
         console.log(error);
     }
@@ -58,6 +60,7 @@ router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
 
 router.get("/:claimId/:sellerId/details", async (req, res, next) => {
     try {
+        console.log("REQ PARAMS: ", req.params.sellerId);
         const dbSeller = await Seller.findById(req.params.sellerId).populate("listedClaims");
         dbSeller.claimId = req.params.claimId;
         res.render("claims/claim-seller-details", {seller: dbSeller});

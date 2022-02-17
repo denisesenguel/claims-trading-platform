@@ -1,25 +1,30 @@
-<div class="m-5">
-    <div class="ms-5">
-        <h1 class="mb-5">Claim Details</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col">
+            <h2 class="mb-4">Claim Details</h2>
 
-        <div class="w-50">
-            <table class="table table-hover table-borderless">
+            <table class="table table-hover w-75">
                 <tbody>
                     {{#each claim}}
-                    <tr>
-                        <td class="text-capitalize w-25">{{@key}}</td>
-                        <td class="text-capitalize w-75">{{this}}</td>
+                    {{#unless @last}}
+                    <tr>   
+                        <th>{{startCase @key}}:</th> 
+                        {{#if @first}}
+                        <td>{{this.firstName}} {{this.lastName}}{{#if this.affiliation}}, {{this.affiliation}}{{/if}}</td>
+                        {{else}}
+                        <td>{{this}}</td>
+                        {{/if}}
                     </tr>
+                    {{/unless}}
                     {{/each}}
                 </tbody>
             </table>
+            {{#if claim.isEditable}}
+                        <a href="/claims/{{claimId}}/edit"><button class="btn btn-primary mt-3">Edit</button></a>
+                        <a href="/claims/{{claimId}}/delete"><button class="btn btn-primary mt-3 ml-2 mr-5">Delete</button></a>
+                {{/if}}
+            <a href="/claims/{{claimId}}/{{claim.seller._id}}/details"><button class="btn btn-primary mt-3">View Seller Details</button></a>
         </div>
-
-        {{#if isSeller}}
-            <a href="/claims/{{id}}/edit"><button class="btn btn-primary mt-3">Edit</button></a>
-            <a href="/claims/{{id}}/delete"><button class="btn btn-primary mt-3">Delete</button></a>
-        {{else}}
-            <a href="/claims/{{id}}/{{sellerID}}/details"> <button class="btn btn-primary mt-3">View Seller Details</button></a>
-        {{/if}}
     </div>
 </div>
