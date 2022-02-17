@@ -1,7 +1,7 @@
-<h1 class="m-5">List new claim</h1>
+<h1 class="m-5">Edit claim</h1>
 
 <div class="d-flex flex-column align-items-center"></div>
-    <form class="w-100 ms-5" action="/claims/create" method="post">
+    <form class="w-100 ms-5" action="/claims/{{claim._id}}/edit" method="post">
 
         <label class="form-label w-50 mb-3">Debtor
             <input class="form-control w-100" type="text" name="debtor" value="{{claim.debtor}}" required>
@@ -42,9 +42,9 @@
         <div class="w-50 d-flex">
             <label class="form-label w-75 mb-3"> Performance
                 <select class="form-select w-100 mt-1" name="performance">
-                    <option value="performing" {{#if claim.performing}} {{claim.performing}} {{/if}}>Performing</option>
-                    <option value="defaulted" {{#if claim.defaulted}} {{claim.defaulted}} {{/if}}>Defaulted</option>
-                    <option value="stressed" {{#if claim.stressed}} {{claim.stressed}} {{/if}}>Stressed</option>
+                    <option value="Performing" {{#if claim.performing}} {{claim.performing}} {{/if}}>Performing</option>
+                    <option value="Defaulted" {{#if claim.defaulted}} {{claim.defaulted}} {{/if}}>Defaulted</option>
+                    <option value="Stressed" {{#if claim.stressed}} {{claim.stressed}} {{/if}}>Stressed</option>
                 </select>
             </label>
             <label class="form-label w-25 mb-3 mt-1">Due Date

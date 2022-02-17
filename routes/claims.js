@@ -87,7 +87,7 @@ router.post("/:claimId/edit", isLoggedInAsSeller, async (req, res, next)=> {
     try {
         const dbUpdated = await Claim.findByIdAndUpdate(req.params.claimId, req.body, {new: true});
         console.log("dbUpdated: ", dbUpdated);
-        res.redirect("/claims");
+        res.redirect("/user/my-claims");
     } catch (error) {
         console.log(error);
     }
