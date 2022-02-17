@@ -1,3 +1,4 @@
+
 const { Schema, model } = require("mongoose");
 
 const claimSchema = new Schema(
@@ -25,12 +26,12 @@ const claimSchema = new Schema(
     currency: {
       type: String,
       // eventually remove and check via HTML form
-      enum: ['EUR', 'USD', 'GBP'],
+      // enum: ['EUR', 'USD', 'GBP'],
       required: true
     },
-    claimType: {
+    type: {
       type: String,
-      enum: ['Corporate', 'Consumer', 'Retail Mortgage', 'Commercial Real Estate', 'Trade'],
+      enum: ['Corporate Loan', 'Consumer Debt', 'Retail Mortgage', 'Commercial Real Estate Loan', 'Trade Claim'],
       required: true
     },
     minimumPrice: {
@@ -55,3 +56,4 @@ const claimSchema = new Schema(
 const Claim = model("Claim", claimSchema);
 
 module.exports = Claim;
+

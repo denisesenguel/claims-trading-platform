@@ -7,9 +7,11 @@ node_modules
 npm-debug.log
 
 # Environment Variables should NEVER be published
+
 .env
 
 # Mac DS Store
 .DS_Store
+
 
 
