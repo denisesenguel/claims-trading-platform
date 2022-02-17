@@ -23,8 +23,14 @@
             {{#if claim.isEditable}}
                         <a href="/claims/{{claimId}}/edit"><button class="btn btn-primary mt-3">Edit</button></a>
                         <a href="/claims/{{claimId}}/delete"><button class="btn btn-primary mt-3 ml-2 mr-5">Delete</button></a>
-                {{/if}}
-            <a href="/claims/{{claimId}}/{{claim.seller._id}}/details"><button class="btn btn-primary mt-3">View Seller Details</button></a>
+                        <br>
+                        <a href="/user/my-claims"><button class="btn btn-primary mt-3">All My Claims</button></a>
+            {{else}}
+                <a href="/claims/{{claimId}}/{{claim.seller._id}}/details"><button class="btn btn-primary mt-3">View Seller Details</button></a>
+                <br>
+                <a href="/claims"><button class="btn btn-primary mt-3">All Claims</button></a>
+            {{/if}}
+            
         </div>
     </div>
 </div>
