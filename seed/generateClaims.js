@@ -24,10 +24,7 @@ async function generateClaims() {
         object.debtorLocation = chance.country({full: true});
         object.faceValue = getFaceValue(type);
         object.currency = await getCurrency(object.debtorLocation) || "USD";
-        // object.minimumPrice = ;
-        // object.performance = ;
-        // console.log("MATURITY: ", object.maturity);
-        console.log("performance: ", object.performance);
+        object.minimumPrice = getRandomMinimumPrice(object.performance);
         claims.push(object);
     }
     console.log("Claims: ", claims);
@@ -36,13 +33,7 @@ async function generateClaims() {
 async function getRandomSeller(numberOfSellers) {
     const seller = await Seller.findOne().skip(Math.floor(Math.random()*numberOfSellers));
     return seller;
-}   
-
-// function getRandomDebtor() {
-//     const random = Math.floor(Math.random()*2);
-//     const debtor = (random === 0) ? chance.name() : chance.company();
-//     return debtor;
-// }
+}
 
 async function getRandomTypeAndDebtor(){
     const types = ['Corporate Loan', 'Consumer Debt', 'Retail Mortgage', 'Commercial Real Estate Loan', 'Trade Claim'];
@@ -74,8 +65,6 @@ async function getCurrency (debtorCountry) {
 
 function getFaceValue(type) {
 
-    // console.log("TYPE: ", type)
-
     let min, range, roundedTo;
 
     switch(type) {
@@ -104,11 +93,8 @@ function getFaceValue(type) {
             range = 1000000;
             break;
     }
-    // console.log("MIN, RANGE: ", min,range);
 
     const randomValue = (Math.random()*range) + min;
-
-    // console.log("RANDOM VALUE: ", randomValue);
 
     if (randomValue < 1000) {
         roundedTo = 10;
@@ -126,11 +112,7 @@ function getFaceValue(type) {
         roundedTo = 10000000;
     }
 
-    // console.log("ROUNDED TO: ", roundedTo);
-
     faceValue = (Math.floor((randomValue / roundedTo)))*roundedTo;
-
-    // console.log("FACE VALUE: ", faceValue);
 
     return faceValue;
 }
@@ -170,14 +152,45 @@ function getRandomDate(type) {
 }
 
 function getRandomPerformance(maturity) {
-    console.log("in getPerformance, logging maturity: ", maturity);
-    console.log("in getPerformance, logging isPast(maturity): ", isPast(maturity));
     if (isPast(maturity)) return "Defaulted";
     const performanceTypes = ['Performing', 'Defaulted', 'Stressed'];
     const randomIndex = Math.floor(Math.random()*performanceTypes.length);
     const performance = performanceTypes[randomIndex];
     console.log("in getPerformance, logging performance: ", performance);
     return performance;
+}
+
+function getRandomMinimumPrice(performance) {
+    let min, range;
+    const roundedTo = 5;
+    switch(performance) {
+        case "Performing":
+            min = 85;
+            range = 15;
+            break;
+        case "Stressed":
+            min = 35;
+            range = 50;
+            break;
+        case "Defaulted":
+            min = 1;
+            range = 35;
+            break;
+        default:
+            min = 40;
+            range = 40;
+            break;
+    }
+    let randomPrice = (Math.random()*range) + min;
+    if (randomPrice < 5) {
+        randomPrice = Math.round(randomPrice);
+    } else if (randomPrice > 5) {
+        randomPrice = (Math.floor((randomPrice / roundedTo)))*roundedTo;
+    }
+    console.log("performance: ", performance)
+    console.log("randomPrice: ", randomPrice)
+
+    return randomPrice;
 }
 
 generateClaims();
