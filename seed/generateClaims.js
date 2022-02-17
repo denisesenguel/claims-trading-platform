@@ -5,7 +5,7 @@ const Claim = require("./../models/Claim.model");
 const Chance = require("chance");
 const isPast = require("date-fns/isPast");
 const chance = new Chance();
-const numberOfClaims = 10;
+const numberOfClaims = 100;
 let maturityRangeStart, maturityRangeEnd;
 
 async function generateClaims() {
@@ -182,9 +182,9 @@ function getRandomMinimumPrice(performance) {
             break;
     }
     let randomPrice = (Math.random()*range) + min;
-    if (randomPrice < 5) {
+    if (randomPrice <= 5 || randomPrice >= 95) {
         randomPrice = Math.round(randomPrice);
-    } else if (randomPrice > 5) {
+    } else if (randomPrice > 5 || randomPrice < 95) {
         randomPrice = (Math.floor((randomPrice / roundedTo)))*roundedTo;
     }
     console.log("performance: ", performance)
