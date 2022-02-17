@@ -11,7 +11,7 @@
             <div class="card w-50">
                 <div class="card-body">
                     <p>Contact person: {{seller.firstName}} {{seller.lastName}}</p>
-                    <p>email address:  {{seller.email}}</p>
+                    <a href="mailto:{{seller.email}}"><button class="btn btn-primary"><i class="bi-envelope"></i> Email Seller </button> </a>
                 </div>
             </div>
             <a href="/claims/{{seller.claimId}}/details"><button class="btn btn-primary mt-5">Back to claim details</button></a>
