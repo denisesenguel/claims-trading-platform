@@ -1,18 +1,20 @@
-{{> accountDetails user}}
+<div class="m-5">
+    {{> accountDetails user}}
 
-{{#if claims}}
+    {{#if claims}}
 
-    <a href="/claims/create"><button class="btn btn-primary ms-5">List a new Claim</button></a>
+        <a href="/claims/create"><button class="btn btn-primary ms-5">List a new Claim</button></a>
 
-    <h2 class="m-5">My Listed Claims</h2>
-    <div class="m-5">
-        {{#each claims}}
-            {{> claimSummary this}}
-        {{/each}}
-    </div>
-    <div class="text-center"> <a href="/user/my-claims">See more</a> </div>
-{{else}}
-    <h2 class="m-5">My Listed Claims</h2>
-    <p class="ms-5 text-muted">No claims listed yet.</p>
-    <a href="/claims/create"><button class="btn btn-primary ms-5">List your first claim now</button></a>
-{{/if}}
+        <h2 class="m-5">My Listed Claims</h2>
+        <div class="m-5">
+            {{#each claims}}
+                {{> claimSummary this}}
+            {{/each}}
+        </div>
+        <div class="text-center"> <a href="/user/my-claims">See more</a> </div>
+    {{else}}
+        <h2 class="m-5">My Listed Claims</h2>
+        <p class="ms-5 text-muted">No claims listed yet.</p>
+        <a href="/claims/create"><button class="btn btn-primary ms-5">List your first claim now</button></a>
+    {{/if}}
+</div>

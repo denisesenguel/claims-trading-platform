@@ -15,6 +15,11 @@ const express = require("express");
 const hbs = require("hbs");
 hbs.registerPartials(__dirname + "/views/partials");
 
+const lodash = require("lodash");
+hbs.registerHelper('startCase', function (string) { 
+ return lodash.startCase(string);
+});
+
 const app = express();
 
 // ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
