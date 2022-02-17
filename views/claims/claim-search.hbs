@@ -2,26 +2,50 @@
     <div class="row">
         {{!-- <div class="col-1"></div> --}}
         <div class="col-3">
-            <div id="form-container" class="m-5 px-5 py-4 w-100 border">
-                <h4 class="mb-3">Search</h4>
+            <div id="form-container" class="m-5 px-5 py-1 w-100 border">
+                {{!-- <label for="sort" class="form-label">Sort by:</label> --}}
                 <form action="/claims/search" method="post">
+                    <h5 class="mt-4 mb-3">Sort by:</h5>
+                        <select id="sortBy" class="form-select w-100 mt-1" name="sortBy">
+                            <option value="">None</option>
+                            <option value="faceValue">Face Value</option>
+                            <option value="minimumPrice">Minimum Price</option>
+                            {{!-- <option value="maturity">Maturity</option>
+                            <option value="claimType">Claim Type</option>
+                            <option value="performance">Trade Claim</option> --}}
+                        </select>
+                    <div class="my-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="sortOrder" id="ascending" value="1">
+                            <label class="form-check-label" for="ascending">Ascending</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="sortOrder" id="descending" value="-1">
+                            <label class="form-check-label" for="descending">Descending</label>
+                        </div>
+                    </div>
+                    <h5 class="mt-4 mb-3">Filter</h5>
                     <div class="mb-3">
                         <label for="seller" class="form-label">Seller</label>
-                        <input id="seller" type="text" class="form-control">
+                        <input id="seller" type="text" class="form-control" name="seller">
                     </div>
                     <div class="mb-3">
                         <label for="debtor" class="form-label">Debtor</label>
                         <input id="debtor" type="text" class="form-control" name="debtor">
                     </div>
                      <div class="mb-3">
+                        <label for="debtorLocation" class="form-label">Debtor Location</label>
+                        <input type="text" class="form-control" name="debtorLocation">
+                    </div>
+                     <div class="mb-3">
                         <label for="claimType" class="form-label">Claim Type</label>
                          <select id="claimType" class="form-select w-100 mt-1" name="claimType">
                             <option value="">None</option>
-                            <option value="Corporate">Corporate</option>
-                            <option value="Consumer">Consumer</option>
+                            <option value="Corporate Loan">Corporate Loan</option>
+                            <option value="Consumer Debt">Consumer Debt</option>
                             <option value="Retail Mortgage">Retail Mortgage</option>
-                            <option value="Commercial Real Estate">Commercial Real Estate</option>
-                            <option value="Trade">Trade</option>
+                            <option value="Commercial Real Estate Loan">Commercial Real Estate Loan</option>
+                            <option value="Trade Claim">Trade Claim</option>
                         </select>
                     </div>
                     <div class="mb-3"></div>
@@ -33,11 +57,7 @@
                             <option value="Stressed">Stressed</option>
                         </select> 
                     </d>
-                     {{!-- <div class="mb-3">
-                        <label for="debtor" class="form-label">Debtor</label>
-                        <input type="text" class="form-control" name="debtor">
-                    </div> --}}
-                    <button id="search-btn" type="submit" class="btn btn-primary btn-sm mt-3">Search</button>
+                    <button id="search-btn" type="submit" class="btn btn-primary btn-sm my-3">Search</button>
                 </form>
             </div>
         </div>
@@ -53,7 +73,6 @@
                     {{/each}}
                 {{else}}
                     <p class="ms-5 text-muted text-center">No results found</p>
-                    {{!-- <a href="/claims/create"><button class="btn btn-primary ms-5">List your first claim now</button></a> --}}
                 {{/if}}
                 </div>
             </div>
@@ -61,30 +80,6 @@
     </div>
 </div>
 
-<script>
 
-const button = document.getElementById("search-btn");
-
-button.addEventListener("click", ()=>{
-    const data = {
-        seller : document.getElementById("seller").value,
-        debtor : document.getElementById("debtor").value,
-        performance : document.getElementById("performance").value,
-        claimType : document.getElementById("claimType").value
-    }
-    search(data);
-});
-
-async function search(e, data){
-    e.preventDefault();
-    const response = await fetch("/claims/search", {
-        method: "POST",
-        body: data
-    });
-    console.log("FROM FETCH: ", response);
-    return response;
-}
-
-</script>
 
 

@@ -16,7 +16,7 @@ async function generateClaims(numberOfClaims) {
         object.maturity = await getRandomDate(type);
         object.performance = getRandomPerformance(object.maturity);
         object.debtor = debtor;
-        object.type = type;
+        object.claimType = type;
         object.debtorLocation = chance.country({full: true});
         object.faceValue = getFaceValue(type);
         object.currency = await getCurrency(object.debtorLocation) || "USD";
