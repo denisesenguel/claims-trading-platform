@@ -10,11 +10,9 @@ let maturityRangeStart, maturityRangeEnd;
 async function generateClaims(numberOfClaims) {
     const claims = [];
     let object = {};
-    // let numberOfSellers = await Seller.countDocuments();
     for (let i = 0; i < numberOfClaims; i++) {
         let { type, debtor } = await getRandomTypeAndDebtor();
         object = {};
-        // object.seller = await getRandomSeller(numberOfSellers);
         object.maturity = await getRandomDate(type);
         object.performance = getRandomPerformance(object.maturity);
         object.debtor = debtor;
@@ -27,11 +25,6 @@ async function generateClaims(numberOfClaims) {
     }
     return claims;
 }
-
-// async function getRandomSeller(numberOfSellers) {
-//     const seller = await Seller.findOne().skip(Math.floor(Math.random()*numberOfSellers));
-//     return seller;
-// }
 
 async function getRandomTypeAndDebtor(){
     const types = ['Corporate Loan', 'Consumer Debt', 'Retail Mortgage', 'Commercial Real Estate Loan', 'Trade Claim'];
@@ -184,6 +177,7 @@ function getRandomMinimumPrice(performance) {
     } else if (randomPrice > 5 || randomPrice < 95) {
         randomPrice = (Math.floor((randomPrice / roundedTo)))*roundedTo;
     }
+
     return randomPrice;
 }
 
