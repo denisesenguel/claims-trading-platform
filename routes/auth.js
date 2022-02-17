@@ -26,13 +26,13 @@ router.post("/signup", async (req, res) => {
   const { role, firstName, lastName, affiliation, email, password } = req.body;
 
   if (!role || !firstName || !lastName || !email || !password) {
-    res
+    return res
       .status(400)
       .render("auth/signup", { errorMessage: "All fields are required." });
   }
 
   if (password.length < 8) {
-    res.status(400).render("auth/signup", {
+    return res.status(400).render("auth/signup", {
       errorMessage: "Your password needs to be at least 8 characters long.",
     });
   }
@@ -55,7 +55,7 @@ router.post("/signup", async (req, res) => {
     const found = (role === 'Seller') ? await Seller.findOne({ email }) : await Buyer.findOne({ email });
   
     if (found) {
-      res
+      return res
         .status(400)
         .render("auth/signup", { errorMessage: "Email already taken." });
     }
@@ -74,11 +74,11 @@ router.post("/signup", async (req, res) => {
   } catch (error) {
     
     if (error instanceof mongoose.Error.ValidationError) {
-      res
+      return res
         .status(400)
         .render("auth/signup", { errorMessage: error.message });
     }
-    res
+    return res
       .status(500)
       .render("auth/signup", { errorMessage: error.message });
   }
@@ -92,30 +92,31 @@ router.get("/login", isLoggedOutAsBuyer, isLoggedOutAsSeller, (req, res) => {
   } else {
     res.render("auth/login");
   }
-  
 });
 
 router.post("/login", async (req, res, next) => {
   const { email, password, role } = req.body;
 
   if (!role || !email || !password) {
-    res
+    return res
       .status(400)
-      .render("auth/login", { errorMessage: "All fields are required." });
+      .render("auth/login", { errorMessage: "All fields are required."});
   }
 
   try {
     const found = (role === 'Seller') ? await Seller.findOne({ email }) : await Buyer.findOne({ email });
-    
     if (!found) {
-      res.status(400).render("auth/login", {errorMessage: "Email not found. Please try again or signup"});
+      console.log("is if statement error triggered");
+      return res.status(400).render("auth/login", {errorMessage: "Email not found. Please try again or signup"});
     }
   
     const isCorrectPassword = await bcrypt.compare(password, found.passwordHash);
+    console.log("isCorrectPasword: ", isCorrectPassword);
     if (!isCorrectPassword) {
-      res.status(400).render("auth/login", {errorMessage: "Incorrect password"});
+      console.log("is if statement error triggered");
+      return res.status(400).render("auth/login", {errorMessage: "Incorrect password"});
     }
-  
+
     if (role === "Seller") {
       req.session.seller = found;
       res.redirect("/user/profile");
