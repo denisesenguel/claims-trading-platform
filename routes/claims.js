@@ -102,5 +102,47 @@ router.get("/:claimId/delete", isLoggedInAsSeller, async (req, res, next) => {
     }
 });
 
+router.get("/search", (req, res, next) => {
+    res.render("claims/claim-search");
+});
+
+router.post("/search", async (req, res, next)=> {
+    try {
+        console.log("REQ.BODY:");
+        console.log(JSON.stringify(req.body));
+        const dbResults = await queryDatabase(req.body);
+        // console.log("dbResults: ", dbResults);
+        // res.send(dbResults);
+        res.render("claims/claim-search", { results: dbResults});
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+
+async function queryDatabase(reqBody){
+    let query = {};
+    queryObject = {};
+    let queryArray = [];
+    for (let key in reqBody) {
+        // console.log("KEY: ", key);
+        queryObject = {};
+        if (reqBody[`${key}`]) {
+            queryObject[`${key}`] = reqBody[`${key}`];
+            queryArray.push(queryObject);
+        }
+    }
+    if (queryArray.length === 0) {
+        return null;
+    } else if (queryArray.length === 1) {
+        query = queryArray[0];
+    } else {
+        query = {$and: queryArray}
+    }
+    // console.log("QUERY (just as entered into find(): ", query);
+    const dbResults = await Claim.find(query, {}, {limit: 2});
+    // const dbResults = await Claim.find({$and: [{perfomance: "Performing"}]});
+    return dbResults;
+} 
 
 module.exports = router;
