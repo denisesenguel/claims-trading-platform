@@ -1,33 +1,35 @@
-<div class="container">
-    <div class="row">
-        <h1>{{#if seller.affiliation}}
-                {{seller.affiliation}}
-            {{else}}
-            {{seller.firstName}} {{seller.lastName}}
-            {{/if}}
-        </h1>
-    </div>
-    <div class="row">
-        <div class="card">
-            <div class="card-body">
-                <p>Contact person: {{seller.firstName}} {{seller.lastName}}</p>
-                <p>email address:  {{seller.email}}</p>
-            </div>
+<div class="m-5">
+    <div class="container">
+        <div class="row">
+            <h1>{{#if seller.affiliation}}
+                    {{seller.affiliation}}
+                {{else}}
+                {{seller.firstName}} {{seller.lastName}}
+                {{/if}}
+            </h1>
         </div>
-    </div>
-    <div class="row">
-        <a class="btn btn-primary" href="/claims/{{seller.claimId}}/details]" role="button">Back to claim details</a></div>
-    </div>
-    <div class="row">
-
-        {{#each seller.listedClaims}}
+        <div class="row">
             <div class="card">
-            <div class="card-body">
-                <p>{{this.claimType}}</p>
-                <p>{{this.currency}} {{this.faceValue}}</p>
-                <a href="/claims/{{this._id}}/details">View Details</a>
+                <div class="card-body">
+                    <p>Contact person: {{seller.firstName}} {{seller.lastName}}</p>
+                    <p>email address:  {{seller.email}}</p>
+                </div>
             </div>
         </div>
-        {{/each}}
+        <div class="row">
+            <a class="btn btn-primary" href="/claims/{{seller.claimId}}/details" role="button">Back to claim details</a></div>
+        </div>
+        <div class="row">
+
+            {{#each seller.listedClaims}}
+                <div class="card">
+                <div class="card-body">
+                    <p>{{this.claimType}}</p>
+                    <p>{{this.currency}} {{this.faceValue}}</p>
+                    <a href="/claims/{{this._id}}/details">View Details</a>
+                </div>
+            </div>
+            {{/each}}
+        </div>
     </div>
 </div>

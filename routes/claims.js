@@ -3,7 +3,7 @@ const router = require("express").Router();
 const Seller = require("./../models/Seller.model");
 const Claim = require("./../models/Claim.model");
 const mongoose = require("mongoose");
-const { format } = require("date-fns");
+const { format, parseISO } = require("date-fns");
 const { isLoggedInAsBuyer, isLoggedInAsSeller, isLoggedInAsEither } = require("./../middleware/isLoggedIn");
 const { isLoggedOutAsBuyer, isLoggedOutAsSeller } = require("./../middleware/isLoggedOut");
 
@@ -36,11 +36,21 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
     try {
-        const oneClaim = await Claim.findById(req.params.claimId).lean();
+        const oneClaim = await Claim.findById(req.params.claimId).populate("seller").lean();
+        
+        sellerID = oneClaim.seller._id;
+
+        oneClaim.seller = oneClaim.seller.firstName + " " + oneClaim.seller.lastName + ", " + oneClaim.seller.affiliation;
+        oneClaim.faceValue = oneClaim.faceValue.toLocaleString();
+        oneClaim.maturity = format(oneClaim.maturity, 'dd.MM.yyyy');
+        
         for (let key in oneClaim) {
             if (key.startsWith("_") || key == 'createdAt' || key == 'updatedAt') delete oneClaim[key]; 
         }
-        res.render("claims/claim-details", {claim: oneClaim, id: req.params.claimId});
+
+        const isSeller = (req.session.seller && req.session.seller._id == sellerID) ?  true : undefined;
+
+        res.render("claims/claim-details", {claim: oneClaim, id: req.params.claimId, sellerID, isSeller});
     } catch (error) {
         console.log(error);
     }
