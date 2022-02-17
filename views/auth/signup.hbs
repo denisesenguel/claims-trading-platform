@@ -45,16 +45,18 @@
             </div>
         </form>
 
-        <div>
-            <p class="text-muted m-3">Already have an account? Login <a href="/auth/login">here</a></p>
+        <div class="text-muted m-3">
+            {{#if buyer}}
+                    <p>Already have an account? Login <a href="/auth/login/?role=buyer">here</a></p>
+            {{else}}
+                {{#if seller}}
+                    <p>Already have an account? Login <a href="/auth/login/?role=seller">here</a></p>
+                {{else}}
+                    <p>Already have an account? Login <a href="/auth/login">here</a></p>
+                {{/if}}
+            {{/if}}
         </div>
         
-        {{#if errorMessage}} 
-            <div class="alert alert-danger" role="alert">
-                {{errorMessage}}
-            </div>
-        {{/if}}
-
     </div>
 </div>
 

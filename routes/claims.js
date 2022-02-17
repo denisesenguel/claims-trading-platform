@@ -25,7 +25,7 @@ router.post("/create", isLoggedInAsSeller, async (req, res, next)=> {
         const dbClaim = await Claim.create(req.body);
         const updatedSeller = await Seller.findByIdAndUpdate(req.session.seller._id, {$push: {listedClaims: dbClaim._id}}, {new: true});
         console.log("UPDATED SELLER: ", updatedSeller);
-        res.redirect("/claims");
+        res.redirect("/user/my-claims");
     } catch (error) {
         console.log(error);
     }
@@ -96,7 +96,7 @@ router.post("/:claimId/edit", isLoggedInAsSeller, async (req, res, next)=> {
 router.get("/:claimId/delete", isLoggedInAsSeller, async (req, res, next) => {
     try {
         await Claim.findByIdAndDelete(req.params.claimId);
-        res.redirect("/claims");
+        res.redirect("/user/my-claims");
     } catch (error) {
         console.log(error);
     }

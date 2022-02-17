@@ -27,7 +27,15 @@
         </form>
     </div>
     <div class="mt-3 text-muted">
-        <p>Don't have an account yet? Register <a href="/auth/signup">here</a></p>
+        {{#if buyer}}
+                <p>Don't have an account yet? Register <a href="/auth/signup/?role=buyer">here</a></p>
+        {{else}}
+            {{#if seller}}
+                <p>Don't have an account yet? Register <a href="/auth/signup/?role=seller">here</a></p>
+            {{else}}
+                <p>Don't have an account yet? Register <a href="/auth/signup">here</a></p>
+            {{/if}}
+        {{/if}}
     </div>
 
     {{#if errorMessage}} 

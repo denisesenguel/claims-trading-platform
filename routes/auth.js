@@ -19,7 +19,13 @@ const { isLoggedInAsEither } =  require("../middleware/isLoggedIn");
 // const isLoggedIn = require("../middleware/isLoggedIn");
 
 router.get("/signup", isLoggedOutAsBuyer, isLoggedOutAsSeller, (req, res) => {
-  res.render("auth/signup");
+  if (req.query.role === "buyer") {
+    res.render("auth/signup", {buyer: "checked"});
+  } else if (req.query.role === "seller"){
+    res.render("auth/signup", {seller: "checked"});
+  } else {
+    res.render("auth/signup");
+  }
 });
 
 router.post("/signup", async (req, res) => {
