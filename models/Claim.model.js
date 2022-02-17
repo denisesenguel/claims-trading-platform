@@ -25,7 +25,7 @@ const claimSchema = new Schema(
     currency: {
       type: String,
       // eventually remove and check via HTML form
-      enum: ['EUR', 'USD', 'GBP'],
+      // enum: ['EUR', 'USD', 'GBP'],
       required: true
     },
     type: {
@@ -40,7 +40,7 @@ const claimSchema = new Schema(
     },
     performance: {
       type: String,
-      enum: ['performing', 'defaulted', 'stressed']
+      enum: ['Performing', 'Defaulted', 'Stressed']
     },
     maturity: {
       type: Date,

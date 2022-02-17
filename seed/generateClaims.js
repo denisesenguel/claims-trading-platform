@@ -5,18 +5,16 @@ const Claim = require("./../models/Claim.model");
 const Chance = require("chance");
 const isPast = require("date-fns/isPast");
 const chance = new Chance();
-const numberOfClaims = 100;
 let maturityRangeStart, maturityRangeEnd;
 
-async function generateClaims() {
+async function generateClaims(numberOfClaims) {
     const claims = [];
     let object = {};
-    let numberOfSellers = await Seller.countDocuments();
-    console.log("Number of sellers: ", numberOfSellers);
+    // let numberOfSellers = await Seller.countDocuments();
     for (let i = 0; i < numberOfClaims; i++) {
         let { type, debtor } = await getRandomTypeAndDebtor();
         object = {};
-        object.seller = await getRandomSeller(numberOfSellers);
+        // object.seller = await getRandomSeller(numberOfSellers);
         object.maturity = await getRandomDate(type);
         object.performance = getRandomPerformance(object.maturity);
         object.debtor = debtor;
@@ -27,13 +25,13 @@ async function generateClaims() {
         object.minimumPrice = getRandomMinimumPrice(object.performance);
         claims.push(object);
     }
-    console.log("Claims: ", claims);
+    return claims;
 }
 
-async function getRandomSeller(numberOfSellers) {
-    const seller = await Seller.findOne().skip(Math.floor(Math.random()*numberOfSellers));
-    return seller;
-}
+// async function getRandomSeller(numberOfSellers) {
+//     const seller = await Seller.findOne().skip(Math.floor(Math.random()*numberOfSellers));
+//     return seller;
+// }
 
 async function getRandomTypeAndDebtor(){
     const types = ['Corporate Loan', 'Consumer Debt', 'Retail Mortgage', 'Commercial Real Estate Loan', 'Trade Claim'];
@@ -156,7 +154,6 @@ function getRandomPerformance(maturity) {
     const performanceTypes = ['Performing', 'Defaulted', 'Stressed'];
     const randomIndex = Math.floor(Math.random()*performanceTypes.length);
     const performance = performanceTypes[randomIndex];
-    console.log("in getPerformance, logging performance: ", performance);
     return performance;
 }
 
@@ -187,13 +184,10 @@ function getRandomMinimumPrice(performance) {
     } else if (randomPrice > 5 || randomPrice < 95) {
         randomPrice = (Math.floor((randomPrice / roundedTo)))*roundedTo;
     }
-    console.log("performance: ", performance)
-    console.log("randomPrice: ", randomPrice)
-
     return randomPrice;
 }
 
-generateClaims();
+module.exports = generateClaims;
 
 
 

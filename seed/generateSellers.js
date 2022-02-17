@@ -1,29 +1,24 @@
 const Chance = require("chance");
 const bcrypt = require("bcrypt");
 const chance = new Chance();
-const numberOfSellers = 10;
 const saltRounds = 10;
-let password, salt, object;
+const password = "123456Aa";
+let salt, object;
 
-function generateSellers(){
+async function generateSellers(numberOfSellers){
     const sellers = [];
     for (let i = 0; i < numberOfSellers; i++) {
         object = {};
-        object.firstName = chance.first();
-        object.lastName = chance.last();
-        object.email = chance.email();
-        object.affliation = chance.company();
-
-        password = chance.hash();
+        object.firstName = await chance.first();
+        object.lastName = await chance.last();
+        object.email = await chance.email();
+        object.affiliation = await chance.company();
         salt = bcrypt.genSaltSync(saltRounds);
         object.passwordHash = bcrypt.hashSync(password, salt);
 
         sellers.push(object); 
-
         }
-    console.log("Sellers: ", sellers);
+    return sellers;
 }
-
-generateSellers();
 
 module.exports = generateSellers;
