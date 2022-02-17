@@ -1,0 +1,40 @@
+<div class="container d-flex flex-column align-items-center vh-100 vw-100">
+    <br>
+    <h1 class="text-center mt-5">Login</h1>
+    <div class="w-50">
+        <form action="/auth/login" method="post" class="w-100">
+
+            <div class="form-check form-check-inline w-100 d-flex justify-content-center align-items-center">
+                <label class="form-check-label m-3">Buyer
+                    <input class="form-check-input" type="radio" name="role" value="Buyer" {{#if buyer}} {{buyer}} {{/if}}>
+                </label>
+                <label class="form-check-label m-3">Seller
+                    <input class="form-check-input" type="radio" name="role" value="Seller" {{#if seller}} {{seller}} {{/if}}>
+                </label>
+            </div>
+
+            <div class="w-100">
+                <label class="form-label w-100">Email
+                    <input type="text" class="form-control w-100" type="email" name="email">
+                </label>
+            </div>
+            <div class="w-100">
+                <label class="form-label w-100">Password
+                    <input class="form-control w-100" type="password" name="password">
+                </label>
+            </div>
+            <button class="btn btn-primary mt-2" type="submit">Log me in!</button>
+        </form>
+    </div>
+    <div class="mt-3 text-muted">
+        <p>Don't have an account yet? Register <a href="/auth/signup">here</a></p>
+    </div>
+
+    {{#if errorMessage}} 
+        <div class="alert alert-danger" role="alert">
+            {{errorMessage}}
+        </div>
+    {{/if}}
+      
+</div>
+

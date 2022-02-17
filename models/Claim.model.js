@@ -1,3 +1,4 @@
+
 const { Schema, model } = require("mongoose");
 
 const claimSchema = new Schema(
@@ -55,3 +56,4 @@ const claimSchema = new Schema(
 const Claim = model("Claim", claimSchema);
 
 module.exports = Claim;
+

@@ -1,0 +1,34 @@
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col mx-5">
+            <h2 class="mb-4">{{#if seller.affiliation}}
+                Seller: {{seller.affiliation}}
+                {{else}}
+                Seller: {{seller.firstName}} {{seller.lastName}}
+                {{/if}}
+            </h2>
+            <div class="card w-50">
+                <div class="card-body">
+                    <p>Contact person: {{seller.firstName}} {{seller.lastName}}</p>
+                    <p>email address:  {{seller.email}}</p>
+                </div>
+            </div>
+            <a href="/claims/{{seller.claimId}}/details"><button class="btn btn-primary mt-5">Back to claim details</button></a>
+            {{#if seller.listedClaims}}
+                <h4 class="mt-5">Other Listed Claims</h4>
+                <div class="mt-5 w-75">
+                    {{#each seller.listedClaims}}
+                        {{> claimSummary this}}
+                    {{/each}}
+                </div>
+                <div class="text-center w-75 mt-4"> <a href="/user/my-claims">See more</a> </div>
+            {{else}}
+                <h2 class="m-5">My Listed Claims</h2>
+                <p class="ms-5 text-muted">No other claims listed yet.</p>
+                <a href="/claims/create"><button class="btn btn-primary ms-5">List another claim</button></a>
+            {{/if}}
+        </div>
+    </div>
+</div>
+
