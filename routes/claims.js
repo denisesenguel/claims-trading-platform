@@ -134,15 +134,38 @@ router.get("/:claimId/delete", isLoggedInAsSeller, isClaimOwner, async (req, res
 });
 
 router.get("/", async (req, res, next) => {
-    const dbResults = await Claim.find({});
-    res.render("claims/claim-search", { results: dbResults});
+    try {
+
+        const {currencies, countries} = await getCountries();
+        const dbResults = await Claim.find({});
+        res.render("claims/claim-search", { 
+            results: dbResults,
+            dropDowns: {
+                performance: performanceArray,
+                claimType: claimTypeArray,
+                currency: currencies,
+                location: countries
+            }
+        });
+    } catch (error) {
+        console.log("Error getting claims from DB: ", error);
+    }
 });
 
 router.post("/search", async (req, res, next)=> {
     try {
+        const {currencies, countries} = await getCountries();
         dbResults = await queryDatabase(req.body);
         // console.log("dbResults: ", dbResults);
-        res.render("claims/claim-search", { results: dbResults});
+        res.render("claims/claim-search", { 
+            results: dbResults,
+            dropDowns: {
+                performance: performanceArray,
+                claimType: claimTypeArray,
+                currency: currencies,
+                location: countries
+            }
+        });
     } catch (error) {
         console.log(error);
     }

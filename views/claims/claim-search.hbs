@@ -27,7 +27,12 @@
                     <h6 class="mt-4 mb-3">Filter by:</h6>
                     <div class="mb-3">
                         <label for="currency" class="form-label form-label-sm">Currency</label>
-                        <input id="currency" type="text" class="form-control form-control-sm" name="currency">
+                        <select id="currency" class="form-select form-select-sm w-100 mt-1" name="currency">
+                            <option value="">None</option>
+                            {{#each dropDowns.currency}}
+                                <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                        </select>
                     </div>
                     <div class="row">
                         <div class="col">
@@ -55,26 +60,29 @@
                     </div>
                      <div class="mb-3">
                         <label for="debtorLocation" class="form-label form-label-sm">Debtor Location</label>
-                        <input id="debtorLocation" type="text" class="form-control form-control-sm" name="debtorLocation">
+                        <select id="debtorLocation" class="form-select form-select-sm w-100 mt-1" name="debtorLocation">
+                            <option value="">None</option>
+                            {{#each dropDowns.location}}
+                                <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                        </select>
                     </div>
                      <div class="mb-3">
                         <label for="claimType" class="form-label">Claim Type</label>
                          <select id="claimType" class="form-select form-select-sm w-100 mt-1" name="claimType">
                             <option value="">None</option>
-                            <option value="Corporate Loan">Corporate Loan</option>
-                            <option value="Consumer Debt">Consumer Debt</option>
-                            <option value="Retail Mortgage">Retail Mortgage</option>
-                            <option value="Commercial Real Estate Loan">Commercial Real Estate Loan</option>
-                            <option value="Trade Claim">Trade Claim</option>
+                            {{#each dropDowns.claimType}}
+                                <option value="{{this}}">{{this}}</option>
+                            {{/each}}
                         </select>
                     </div>
                     <div class="mb-3"></div>
                         <label for="performance" class="form-label">Performance</label>
                         <select id="performance" class="form-select form-select-sm w-100 mt-1" name="performance">
                             <option value="">None</option>
-                            <option value="Performing">Performing</option>
-                            <option value="Defaulted">Defaulted</option>
-                            <option value="Stressed">Stressed</option>
+                            {{#each dropDowns.performance}}
+                                <option value="{{this}}">{{this}}</option>
+                            {{/each}}
                         </select> 
                     </d>
                     <button id="search-btn" type="submit" class="btn btn-primary btn-sm my-3">Search</button>
