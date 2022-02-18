@@ -3,6 +3,7 @@ console.log("Search.js executing")
 const button = document.getElementById("search-btn");
 
 button.addEventListener("click", (e)=>{
+    e.preventDefault();
     const sortByInput = document.getElementById("sortBy").value;
     const sortAscending = document.getElementById("ascending").value;
     const sortDescending = document.getElementById("descending").value;
@@ -13,8 +14,10 @@ button.addEventListener("click", (e)=>{
     const claimTypeInput = document.getElementById("claimType").value
     const performanceInput = document.getElementById("performance").value;
     
-    let sortOrder = sortAscending || sortDescending;
-    let sortQuery;
+    console.log("sortDescending: ", sortDescending);
+    console.log("sortAscending: ", sortAscending);
+    let sortOrder = sortDescending;
+    let sortQuery = {};
     if (sortByInput && sortOrder) {
         sortQuery[`${sortByInput}`] = sortOrder;
     } else {
@@ -59,11 +62,10 @@ button.addEventListener("click", (e)=>{
         filterQuery = {$and: queryArray}
     }
     let body = {sortQuery, filterQuery};
-    search(e, body);
+    search(body);
 });
 
-async function search(e, body){
-    e.preventDefault();
+async function search(body){
     console.log("BODY: ", body, JSON.stringify(body));
     const response = await fetch("/claims/search", {
         method: "POST",
@@ -73,6 +75,9 @@ async function search(e, body){
         },
         body: JSON.stringify(body)
     });
-    console.log("FROM FETCH: ", response);
+    const textResponse = await response.text();
+    document.write(textResponse);
+    console.log("FROM FETCH: ", jsonResponse);
+    console.log("hello wo");
     return;
 }
