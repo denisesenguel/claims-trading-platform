@@ -11,14 +11,14 @@ async function generateClaims(numberOfClaims) {
     const claims = [];
     let object = {};
     for (let i = 0; i < numberOfClaims; i++) {
-        let { type, debtor } = await getRandomTypeAndDebtor();
+        let { claimType, debtor } = await getRandomTypeAndDebtor();
         object = {};
-        object.maturity = await getRandomDate(type);
+        object.maturity = await getRandomDate(claimType);
         object.performance = getRandomPerformance(object.maturity);
         object.debtor = debtor;
-        object.claimType = type;
+        object.claimType = claimType;
         object.debtorLocation = chance.country({full: true});
-        object.faceValue = getFaceValue(type);
+        object.faceValue = getFaceValue(claimType);
         object.currency = await getCurrency(object.debtorLocation) || "USD";
         object.minimumPrice = getRandomMinimumPrice(object.performance);
         claims.push(object);
@@ -27,11 +27,11 @@ async function generateClaims(numberOfClaims) {
 }
 
 async function getRandomTypeAndDebtor(){
-    const types = ['Corporate Loan', 'Consumer Debt', 'Retail Mortgage', 'Commercial Real Estate Loan', 'Trade Claim'];
-    let type, debtor;
-    const randomIndex = Math.floor(Math.random()*types.length);
-    type = types[randomIndex];
-    switch(type) {
+    const claimTypes = ['Corporate Loan', 'Consumer Debt', 'Retail Mortgage', 'Commercial Real Estate Loan', 'Trade Claim'];
+    let claimType, debtor;
+    const randomIndex = Math.floor(Math.random()*claimTypes.length);
+    claimType = claimTypes[randomIndex];
+    switch(claimType) {
         case "Corporate Loan":
         case "Commercial Real Estate Loan": 
         case "Trade Claim":
@@ -41,7 +41,7 @@ async function getRandomTypeAndDebtor(){
         case "Retail Mortgage":
             debtor = chance.name();
     }
-    return { type, debtor };
+    return { claimType, debtor };
 }
 
 async function getCurrency (debtorCountry) {
@@ -54,11 +54,11 @@ async function getCurrency (debtorCountry) {
     return currency;
 }
 
-function getFaceValue(type) {
+function getFaceValue(claimType) {
 
     let min, range, roundedTo;
 
-    switch(type) {
+    switch(claimType) {
         case "Corporate Loan":
             min = 10000;
             range = 50000000;
@@ -108,9 +108,9 @@ function getFaceValue(type) {
     return faceValue;
 }
 
-function getRandomDate(type) {
+function getRandomDate(claimType) {
 
-    switch(type) {
+    switch(claimType) {
         case "Corporate Loan":
             maturityRangeStart = "2016-01-01";
             maturityRangeEnd = "2032-12-31";

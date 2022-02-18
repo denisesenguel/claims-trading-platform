@@ -15,20 +15,18 @@ const express = require("express");
 const hbs = require("hbs");
 hbs.registerPartials(__dirname + "/views/partials");
 
+// Register formatting helper
 const lodash = require("lodash");
 hbs.registerHelper('startCase', function (string) { 
  return lodash.startCase(string);
 });
 
+
+// 👇 Start handling routes here
 const app = express();
 
 // ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
 require("./config")(app);
-
-const projectName = "claims-trading-platform";
-const capitalized = (string) => string[0].toUpperCase() + string.slice(1).toLowerCase();
-
-app.locals.title = `${capitalized(projectName)} created with IronLauncher`;
 
 // expose session data for handlebars
 app.use((req, res, next)=>{
@@ -36,7 +34,7 @@ app.use((req, res, next)=>{
     next();
 });
 
-// 👇 Start handling routes here
+// Mount route files
 const index = require("./routes/index");
 app.use("/", index);
 

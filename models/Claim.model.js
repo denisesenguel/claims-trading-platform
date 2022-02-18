@@ -1,3 +1,4 @@
+const { claimTypeArray, performanceArray } = require("./../utils/enum-configs");
 
 const { Schema, model } = require("mongoose");
 
@@ -31,7 +32,7 @@ const claimSchema = new Schema(
     },
     claimType: {
       type: String,
-      enum: ['Corporate Loan', 'Consumer Debt', 'Retail Mortgage', 'Commercial Real Estate Loan', 'Trade Claim'],
+      enum: claimTypeArray,
       required: true
     },
     minimumPrice: {
@@ -41,7 +42,7 @@ const claimSchema = new Schema(
     },
     performance: {
       type: String,
-      enum: ['Performing', 'Defaulted', 'Stressed']
+      enum: performanceArray
     },
     maturity: {
       type: Date,
