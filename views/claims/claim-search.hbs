@@ -2,11 +2,11 @@
     <div class="row">
         {{!-- <div class="col-1"></div> --}}
         <div class="col-3">
-            <div id="form-container" class="m-5 px-5 py-1 w-100 border">
+            <div class="m-5 px-5 py-1 w-100 border">
                 {{!-- <label for="sort" class="form-label">Sort by:</label> --}}
                 <form action="/claims/search" method="post">
-                    <h5 class="mt-4 mb-3">Sort by:</h5>
-                        <select id="sortBy" class="form-select w-100 mt-1" name="sortBy">
+                    <h6 class="mt-4 mb-3">Sort by:</h6>
+                        <select id="sortBy" class="form-select form-select-sm w-100 mt-1" name="sortBy">
                             <option value="">None</option>
                             <option value="faceValue">Face Value</option>
                             <option value="minimumPrice">Minimum Price</option>
@@ -14,7 +14,7 @@
                             <option value="claimType">Claim Type</option>
                             <option value="performance">Performance</option>
                         </select>
-                    <div class="my-3">
+                    <div class="input-group input-group-sm my-3">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" name="sortOrder" id="ascending" value="1">
                             <label class="form-check-label" for="ascending">Ascending</label>
@@ -24,22 +24,42 @@
                             <label class="form-check-label" for="descending">Descending</label>
                         </div>
                     </div>
-                    <h5 class="mt-4 mb-3">Filter</h5>
-                    <div class="mb-3">
+                    <h6 class="mt-4 mb-3">Filter by:</h6>
+                    {{!-- <div class="mb-3">
                         <label for="seller" class="form-label">Seller</label>
                         <input id="seller" type="text" class="form-control" name="seller">
+                    </div> --}}
+                    <div class="row">
+                        <div class="col">
+
+                            <div class="mb-3">
+                                <label for="faceValueStart" class="form-label form-label-sm">Face Value:</label>
+                                <input name="faceValueStart" type="number" class="form-control form-control-sm" >
+                            </div>
+
+
+                        </div>
+                        <div class="col">
+                                <div class="mb-3">
+                                    <label for="faceValueEnd" class="form-label">And:</label>
+                                    <input name="faceValueEnd" type="number" class="form-control form-control-sm" >
+                                </div>
+                        </div>
                     </div>
+
+
+
                     <div class="mb-3">
                         <label for="debtor" class="form-label">Debtor</label>
-                        <input id="debtor" type="text" class="form-control" name="debtor">
+                        <input id="debtor" type="text" class="form-control form-control-sm" name="debtor">
                     </div>
                      <div class="mb-3">
-                        <label for="debtorLocation" class="form-label">Debtor Location</label>
-                        <input type="text" class="form-control" name="debtorLocation">
+                        <label for="debtorLocation" class="form-label form-label-sm">Debtor Location</label>
+                        <input type="text" class="form-control form-control-sm" name="debtorLocation">
                     </div>
                      <div class="mb-3">
                         <label for="claimType" class="form-label">Claim Type</label>
-                         <select id="claimType" class="form-select w-100 mt-1" name="claimType">
+                         <select id="claimType" class="form-select form-select-sm w-100 mt-1" name="claimType">
                             <option value="">None</option>
                             <option value="Corporate Loan">Corporate Loan</option>
                             <option value="Consumer Debt">Consumer Debt</option>
@@ -50,7 +70,7 @@
                     </div>
                     <div class="mb-3"></div>
                         <label for="performance" class="form-label">Performance</label>
-                        <select id="performance" class="form-select w-100 mt-1" name="performance">
+                        <select id="performance" class="form-select form-select-sm w-100 mt-1" name="performance">
                             <option value="">None</option>
                             <option value="Performing">Performing</option>
                             <option value="Defaulted">Defaulted</option>
