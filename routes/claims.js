@@ -113,7 +113,11 @@ router.post("/search", async (req, res, next)=> {
         const dbResults = await queryDatabase(req.body);
         // console.log("dbResults: ", dbResults);
         // res.send(dbResults);
-        res.render("claims/claim-search", { results: dbResults});
+        console.log("dbResults: ", dbResults);
+        console.log("{ results: dbResults}: ", { results: dbResults});
+        res.end();
+        return;
+        // res.render("claims/claim-search", { results: dbResults});
     } catch (error) {
         console.log(error);
     }
@@ -149,8 +153,7 @@ async function queryDatabase(reqBody){
     // }
     console.log("QUERY (just as entered into find(): ", reqBody.filterQuery);
     console.log("SORT OBJECT (just as entered into find(): ", reqBody.sortQuery);
-    const dbResults = await Claim.find(reqBody.filterQuery).sort(reqBody.sortQuery);
-    console.log("dbResults: ", dbResults);
+    const dbResults = await Claim.find(reqBody.filterQuery).sort(reqBody.sortQuery).limit(2);
     return dbResults;
 } 
 
