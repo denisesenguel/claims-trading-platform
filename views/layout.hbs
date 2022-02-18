@@ -23,12 +23,15 @@
                   debtrade
                </a>
                <ul class="list-unstyled d-flex justify-content-center align-items-center mb-0">
-                  <li class="nav-item"> <a href="/claims" class="nav-link">Browse Claims</a> </li>
+                  
 
                   {{#if session.seller}}
+                     <li><a href="/user/my-claims" class="nav-link">My Claims</a></li>
+                     <li><a href="/claims/create" class="nav-link">Create Claim</a></li>
                      <li> <a href="/user/profile" class="nav-link">My Account</a></li>
                      <li> <a href="/auth/logout" class="nav-link">Logout</a> </li>
                   {{else}}
+                  <li class="nav-item"> <a href="/claims" class="nav-link">Browse Claims</a> </li>
                      {{#if session.buyer}}
                         <li> <a href="/user/profile" class="nav-link">My Account</a></li>
                         <li> <a href="/auth/logout" class="nav-link">Logout</a> </li>
