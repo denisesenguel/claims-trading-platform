@@ -4,7 +4,7 @@
         <div class="col-3">
             <div class="m-5 px-5 py-1 w-100 border">
                 {{!-- <label for="sort" class="form-label">Sort by:</label> --}}
-                <form action="/claims/search" method="post">
+                <form action="" method="">
                     <h6 class="mt-4 mb-3">Sort by:</h6>
                         <select id="sortBy" class="form-select form-select-sm w-100 mt-1" name="sortBy">
                             <option value="">None</option>
@@ -105,74 +105,76 @@
 
 const button = document.getElementById("search-btn");
 
-button.addEventListener("click", ()=>{
-        const sortByInput = document.getElementById("sortBy").value,
-        const sortOrderInput = document.getElementById("sortOrder").value,
-        const faceValueStartInput = document.getElementById("faceValueStart").value,
-        const faceValueEndInput = document.getElementById("faceValueEnd").value,
-        const debtorInput = document.getElementById("debtor").value,
-        const debtorLocationInput = document.getElementById("debtorLocation").value,
-        const claimTypeInput = document.getElementById("claimType").value
-        const performanceInput = document.getElementById("performance").value,
-
-        queryInputArray = [faceValueStartInput,faceValueEndInput, debtorInput, debtorLocationInput, claimTypeInput, performanceInput];  ]
-        
-        let faceValueStartQuery, 
-
-        if (faceValueStartInput) {
-            faceValueStartQuery = {faceValue: {$gte: faceValueStartInput}}
-        }
-        if (faceValueEndInput) {
-            faceValueEndQuery = {faceValue: {$lte: faceValueEndInput}}
-        }
-        if (debtorInput) {
-            debtorQuery = {debtor: debtorInput};
-        }
-         if (debtorInput) {
-            debtorQuery = {debtor: debtorInput};
-        }
-         if (debtorInput) {
-            debtorQuery = {debtor: debtorInput};
-        }
-
-
-        
-
-
-        queryArray = [
-        {faceValue: {$gte: faceValueStartInput}
-
-
-
-        }]
-        
-        
-        
-        fqueryArray = [{}]
-
-
+button.addEventListener("click", (e)=>{
+    const sortByInput = document.getElementById("sortBy").value;
+    const sortAscending = document.getElementById("ascending").value;
+    const sortDescending = document.getElementById("descending").value;
+    const faceValueStartInput = document.getElementById("faceValueStart").value;
+    const faceValueEndInput = document.getElementById("faceValueEnd").value;
+    const debtorInput = document.getElementById("debtor").value;
+    const debtorLocationInput = document.getElementById("debtorLocation").value;
+    const claimTypeInput = document.getElementById("claimType").value
+    const performanceInput = document.getElementById("performance").value;
+    
+    let sortOrder = sortAscending || sortDescending;
+    let sortQuery;
+    if (sortByInput && sortOrder) {
+        sortQuery[`${sortByInput}`] = sortOrder;
+    } else {
+        sortQuery = {};
     }
-    search(input);
+
+    let queryArray = [];
+    
+    let faceValueRange = {};
+    let faceValueQuery = {faceValue: faceValueRange}
+
+    if (faceValueStartInput) {
+        faceValueRange["$gte"] = faceValueStartInput;
+    }
+    if (faceValueEndInput) {
+        faceValueRange["lte"] = faceValueEndInput;
+    }
+    if (faceValueStartInput || faceValueEndInput) {
+            queryArray.push(faceValueQuery);
+    }
+    if (debtorInput) {
+        let debtorQuery = {debtor: debtorInput};
+        queryArray.push(debtorQuery);
+    }
+    if (debtorLocationInput) {
+        let debtorLocationQuery = {debtorLocation: debtorLocationInput};
+        queryArray.push(debtorLocationQuery);
+    }
+    if (claimTypeInput) {
+        let claimTypeQuery = {claimType: claimTypeInput};
+        queryArray.push(claimTypeQuery);
+    }
+    if (performanceInput) {
+        let performanceQuery = {performance: performanceInput};
+        queryArray.push(performanceQuery);
+    }
+    if (queryArray.length === 0) {
+        filterQuery = {};
+    } else if (queryArray.length === 1) {
+        filterQuery = queryArray[0];
+    } else {
+        filterQuery = {$and: queryArray}
+    }
+    let body = {sortQuery, filterQuery};
+    search(e, body);
 });
 
-function formatDataForQuery (input) {
-    const body = {
-        sortObject: {`${sortBy}`: sortOrder},
-        filterObject: {}
-    }
-
-}
-
-
-
-
-
-
-async function search(e, data){
+async function search(e, body){
     e.preventDefault();
+    console.log("BODY: ", body, JSON.stringify(body));
     const response = await fetch("/claims/search", {
         method: "POST",
-        body: data
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
     });
     console.log("FROM FETCH: ", response);
     return response;

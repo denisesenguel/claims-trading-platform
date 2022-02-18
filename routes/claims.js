@@ -108,8 +108,8 @@ router.get("/search", (req, res, next) => {
 
 router.post("/search", async (req, res, next)=> {
     try {
-        console.log("REQ.BODY:");
-        console.log(JSON.stringify(req.body));
+        console.log("REQ.BODY:", req.body);
+        console.log(typeof req.body);
         const dbResults = await queryDatabase(req.body);
         // console.log("dbResults: ", dbResults);
         // res.send(dbResults);
@@ -119,38 +119,38 @@ router.post("/search", async (req, res, next)=> {
     }
 });
 
-
 async function queryDatabase(reqBody){
-    let query = {};
-    queryObject = {};
-    sortObject = {};
-    let sortObjectKey;
+    // let query = {};
+    // queryObject = {};
+    // sortObject = {};
+    // let sortObjectKey;
 
-    let queryArray = [];
-    for (let key in reqBody) {
-        queryObject = {};
-        if (reqBody[`${key}`]) {
-            if (key === "sortBy") {
-                sortObject[reqBody[`${key}`]] = 1;
-                sortObjectKey = [reqBody[`${key}`]];
-            } else if (key === "sortOrder") {
-                sortObject[sortObjectKey] = Number(reqBody[`${key}`]);
-            } else if (key !== "sortBy" && key !== "sortOrder") {
-                queryObject[`${key}`] = reqBody[`${key}`];
-                queryArray.push(queryObject);
-            }
-        }
-    }
-    if (queryArray.length === 0) {
-        query = {};
-    } else if (queryArray.length === 1) {
-        query = queryArray[0];
-    } else {
-        query = {$and: queryArray}
-    }
-    console.log("QUERY (just as entered into find(): ", query);
-    console.log("SORT OBJECT (just as entered into find(): ", sortObject);
-    const dbResults = await Claim.find(query).sort(sortObject);
+    // let queryArray = [];
+    // for (let key in reqBody) {
+    //     queryObject = {};
+    //     if (reqBody[`${key}`]) {
+    //         if (key === "sortBy") {
+    //             sortObject[reqBody[`${key}`]] = 1;
+    //             sortObjectKey = [reqBody[`${key}`]];
+    //         } else if (key === "sortOrder") {
+    //             sortObject[sortObjectKey] = Number(reqBody[`${key}`]);
+    //         } else if (key !== "sortBy" && key !== "sortOrder") {
+    //             queryObject[`${key}`] = reqBody[`${key}`];
+    //             queryArray.push(queryObject);
+    //         }
+    //     }
+    // }
+    // if (queryArray.length === 0) {
+    //     query = {};
+    // } else if (queryArray.length === 1) {
+    //     query = queryArray[0];
+    // } else {
+    //     query = {$and: queryArray}
+    // }
+    console.log("QUERY (just as entered into find(): ", reqBody.filterQuery);
+    console.log("SORT OBJECT (just as entered into find(): ", reqBody.sortQuery);
+    const dbResults = await Claim.find(reqBody.filterQuery).sort(reqBody.sortQuery);
+    console.log("dbResults: ", dbResults);
     return dbResults;
 } 
 

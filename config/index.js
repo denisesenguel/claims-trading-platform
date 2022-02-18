@@ -34,9 +34,9 @@ module.exports = (app) => {
   app.use(logger("dev"));
 
   // To have access to `body` property in the request
-  app.use(express.text());
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
+  app.use(express.text());
   app.use(cookieParser());
 
   // Normalizes the path to the views folder
