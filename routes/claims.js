@@ -41,15 +41,15 @@ router.post("/create", isLoggedInAsSeller, async (req, res, next)=> {
     }
 });
 
-router.get("/", async (req, res, next) => {
-    try {
-        const allClaims = await Claim.find().lean();
-        allClaims.forEach(c => c.faceValue = c.faceValue.toLocaleString());
-        res.render("claims/claims-overview", {claims: allClaims});
-    } catch (error) {
-        console.log(error);
-    }
-});
+// router.get("/", async (req, res, next) => {
+//     try {
+//         const allClaims = await Claim.find().lean();
+//         allClaims.forEach(c => c.faceValue = c.faceValue.toLocaleString());
+//         res.render("claims/claim-search", {claims: allClaims});
+//     } catch (error) {
+//         console.log(error);
+//     }
+// });
 
 router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
     try {
@@ -133,14 +133,14 @@ router.get("/:claimId/delete", isLoggedInAsSeller, isClaimOwner, async (req, res
     }
 });
 
-router.get("/search", (req, res, next) => {
-    res.render("claims/claim-search");
+router.get("/", async (req, res, next) => {
+    const dbResults = await Claim.find({});
+    res.render("claims/claim-search", { results: dbResults});
 });
 
 router.post("/search", async (req, res, next)=> {
     try {
-        console.log("REQ.BODY:", req.body);
-        const dbResults = await queryDatabase(req.body);
+        dbResults = await queryDatabase(req.body);
         // console.log("dbResults: ", dbResults);
         res.render("claims/claim-search", { results: dbResults});
     } catch (error) {
