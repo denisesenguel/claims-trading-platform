@@ -136,10 +136,6 @@ async function queryDatabase(reqBody){
             } else if (key === "sortOrder") {
                 sortObject[sortObjectKey] = Number(reqBody[`${key}`]);
             } else if (key !== "sortBy" && key !== "sortOrder") {
-                // if (key === "seller") {
-                //     const dbSeller = await Seller.findOne({firstName: reqBody[`${key}`]}) || await Seller.findOne({lastName: reqBody[`${key}`]}) || await Seller.findOne({affiliation: reqBody[`${key}`]});
-                //     queryObject[`${key}`] = dbSeller._id;
-                // }
                 queryObject[`${key}`] = reqBody[`${key}`];
                 queryArray.push(queryObject);
             }

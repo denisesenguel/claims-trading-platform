@@ -34,7 +34,7 @@
 
                             <div class="mb-3">
                                 <label for="faceValueStart" class="form-label form-label-sm">Face Value:</label>
-                                <input name="faceValueStart" type="number" class="form-control form-control-sm" >
+                                <input id="faceValueStart" name="faceValueStart" type="number" class="form-control form-control-sm" >
                             </div>
 
 
@@ -42,7 +42,7 @@
                         <div class="col">
                                 <div class="mb-3">
                                     <label for="faceValueEnd" class="form-label">And:</label>
-                                    <input name="faceValueEnd" type="number" class="form-control form-control-sm" >
+                                    <input id="faceValueEnd" name="faceValueEnd" type="number" class="form-control form-control-sm" >
                                 </div>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
                     </div>
                      <div class="mb-3">
                         <label for="debtorLocation" class="form-label form-label-sm">Debtor Location</label>
-                        <input type="text" class="form-control form-control-sm" name="debtorLocation">
+                        <input id="debtorLocation" type="text" class="form-control form-control-sm" name="debtorLocation">
                     </div>
                      <div class="mb-3">
                         <label for="claimType" class="form-label">Claim Type</label>
@@ -101,5 +101,82 @@
 </div>
 
 
+<script>
 
+const button = document.getElementById("search-btn");
+
+button.addEventListener("click", ()=>{
+        const sortByInput = document.getElementById("sortBy").value,
+        const sortOrderInput = document.getElementById("sortOrder").value,
+        const faceValueStartInput = document.getElementById("faceValueStart").value,
+        const faceValueEndInput = document.getElementById("faceValueEnd").value,
+        const debtorInput = document.getElementById("debtor").value,
+        const debtorLocationInput = document.getElementById("debtorLocation").value,
+        const claimTypeInput = document.getElementById("claimType").value
+        const performanceInput = document.getElementById("performance").value,
+
+        queryInputArray = [faceValueStartInput,faceValueEndInput, debtorInput, debtorLocationInput, claimTypeInput, performanceInput];  ]
+        
+        let faceValueStartQuery, 
+
+        if (faceValueStartInput) {
+            faceValueStartQuery = {faceValue: {$gte: faceValueStartInput}}
+        }
+        if (faceValueEndInput) {
+            faceValueEndQuery = {faceValue: {$lte: faceValueEndInput}}
+        }
+        if (debtorInput) {
+            debtorQuery = {debtor: debtorInput};
+        }
+         if (debtorInput) {
+            debtorQuery = {debtor: debtorInput};
+        }
+         if (debtorInput) {
+            debtorQuery = {debtor: debtorInput};
+        }
+
+
+        
+
+
+        queryArray = [
+        {faceValue: {$gte: faceValueStartInput}
+
+
+
+        }]
+        
+        
+        
+        fqueryArray = [{}]
+
+
+    }
+    search(input);
+});
+
+function formatDataForQuery (input) {
+    const body = {
+        sortObject: {`${sortBy}`: sortOrder},
+        filterObject: {}
+    }
+
+}
+
+
+
+
+
+
+async function search(e, data){
+    e.preventDefault();
+    const response = await fetch("/claims/search", {
+        method: "POST",
+        body: data
+    });
+    console.log("FROM FETCH: ", response);
+    return response;
+}
+
+</script>
 
