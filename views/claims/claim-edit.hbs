@@ -11,7 +11,7 @@
             <select class="form-select w-100 mt-1" name="debtorLocation">
                     <option value={{countries.selected}} selected>{{countries.selected}}</option>
                     {{#each countries.other}}
-                        <option value={{this.countryName}}>{{this.countryName}}</option>
+                        <option value={{this}}>{{this}}</option>
                     {{/each}}
                 </select>
         </label>
@@ -33,11 +33,10 @@
         <div class="w-50 d-flex">
             <label class="form-label w-50 mb-3">Claim Type
                 <select class="form-select w-100 mt-1" name="claimType">
-                    <option value="Corporate Loan"{{#if claim.Corporate}} {{claim.Corporate}} {{/if}} >Corporate</option>
-                    <option value="Consumer Debt" {{#if claim.Consumer}} {{claim.Consumer}} {{/if}}>Consumer</option>
-                    <option value="Retail Mortgage"{{#if claim.[Retail Mortgage]}} {{claim.[Retail Mortgage]}} {{/if}}>Retail Mortgage</option>
-                    <option value="Commercial Real Estate Loan" {{#if claim.[Commercial Real Estate]}} {{claim.[Commercial Real Estate]}} {{/if}}>Commercial Real Estate</option>
-                    <option value="Trade Claim" {{#if claim.Trade}} {{claim.Trade}} {{/if}}>Trade</option>
+                    <option value="{{claimTypes.selected}}" selected>{{claimTypes.selected}}</option>
+                    {{#each claimTypes.other}}
+                        <option value="{{this}}">{{this}}</option>
+                    {{/each}}
                 </select>
             </label>
             <label class="form-label w-50 mb-3 mt-1">Minimum Price (% of Face Value)
@@ -48,9 +47,10 @@
         <div class="w-50 d-flex">
             <label class="form-label w-75 mb-3"> Performance
                 <select class="form-select w-100 mt-1" name="performance">
-                    <option value="Performing" {{#if claim.performing}} {{claim.performing}} {{/if}}>Performing</option>
-                    <option value="Defaulted" {{#if claim.defaulted}} {{claim.defaulted}} {{/if}}>Defaulted</option>
-                    <option value="Stressed" {{#if claim.stressed}} {{claim.stressed}} {{/if}}>Stressed</option>
+                    <option value="{{performanceTypes.selected}}" selected>{{performanceTypes.selected}}</option>
+                    {{#each performanceTypes.other}}
+                        <option value="{{this}}">{{this}}</option>
+                    {{/each}}
                 </select>
             </label>
             <label class="form-label w-25 mb-3 mt-1">Due Date

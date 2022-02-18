@@ -10,7 +10,7 @@
         <label class="form-label w-50 mb-3">Debtor country
             <select class="form-select w-100 mt-1" name="debtorLocation">
                 {{#each countries}}
-                    <option value={{this.countryName}}>{{this.countryName}}</option>
+                    <option value={{this}}>{{this}}</option>
                 {{/each}}
             </select>
         </label>
@@ -31,11 +31,9 @@
         <div class="w-50 d-flex">
             <label class="form-label w-50 mb-3">Claim Type
                 <select class="form-select w-100 mt-1" name="claimType">
-                    <option value="Corporate Loan">Corporate</option>
-                    <option value="Consumer Debt">Consumer</option>
-                    <option value="Retail Mortgage">Retail Mortgage</option>
-                    <option value="Commercial Real Estate Loan">Commercial Real Estate</option>
-                    <option value="Trade Claim">Trade</option>
+                    {{#each claimTypes}}
+                        <option value="{{this}}">{{this}}</option>
+                    {{/each}}
                 </select>
             </label>
             <label class="form-label w-50 mb-3 mt-1">Minimum Price (% of Face Value)
@@ -46,9 +44,9 @@
         <div class="w-50 d-flex">
             <label class="form-label w-75 mb-3"> Performance
                 <select class="form-select w-100 mt-1" name="performance">
-                    <option value="Performing">Performing</option>
-                    <option value="Defaulted">Defaulted</option>
-                    <option value="Stressed">Stressed</option>
+                    {{#each performanceTypes}}
+                        <option value="{{this}}">{{this}}</option>
+                    {{/each}}
                 </select>
             </label>
             <label class="form-label w-25 mb-3 mt-1">Due Date

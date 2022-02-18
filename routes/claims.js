@@ -8,7 +8,7 @@ const Seller = require("./../models/Seller.model");
 const Claim = require("./../models/Claim.model");
 const {format} = require("date-fns");
 
-const getCountries = require("./../utils/get-countries");
+const {claimTypeArray, performanceArray, getCountries} = require("./../utils/enum-configs");
 
 const hbs = require("handlebars");
 hbs.registerHelper('startCase', function (string) { 
@@ -22,8 +22,12 @@ const isClaimOwner = require("./../middleware/isClaimOwner");
 
 router.get("/create", isLoggedInAsSeller, async (req, res, next)=> {
     const {countries, currencies} = await getCountries();
-    res.render("claims/claim-create", {countries: countries, currencies: currencies});
-    
+    res.render("claims/claim-create", {
+        countries: countries, 
+        currencies: currencies, 
+        claimTypes: claimTypeArray, 
+        performanceTypes: performanceArray
+    }); 
 });
 
 router.post("/create", isLoggedInAsSeller, async (req, res, next)=> {
@@ -79,20 +83,32 @@ router.get("/:claimId/edit", isLoggedInAsSeller, isClaimOwner, async (req, res, 
     try {
         const dbClaim = await Claim.findById(req.params.claimId).lean();
         
-        dbClaim[`${dbClaim.claimType}`] = "selected";
-        dbClaim[`${dbClaim.performance}`] = "selected";
-        dbClaim.maturity = format(dbClaim.maturity, "yyyy-MM-dd");
+        dbClaim.maturity = format(dbClaim.maturity, 'yyyy-MM-dd');
         
         const {countries, currencies} = await getCountries();
+
         const countriesDistinction = {
             selected: dbClaim.debtorLocation,
-            other: countries.filter(country => country.countryName != dbClaim.debtorLocation)
+            other: countries.filter(country => country != dbClaim.debtorLocation)
         };
         const currenciesDistinction = {
             selected: dbClaim.currency,
             other: currencies.filter(code => code != dbClaim.currency)
         };
-        res.render("claims/claim-edit", {claim: dbClaim, currencies: currenciesDistinction, countries: countriesDistinction});
+
+        res.render("claims/claim-edit", {
+            claim: dbClaim, 
+            currencies: currenciesDistinction, 
+            countries: countriesDistinction,
+            claimTypes: {
+                selected: dbClaim.claimType,
+                other: claimTypeArray.filter(type => type !== dbClaim.claimType)
+            }, 
+            performanceTypes: {
+                selected: dbClaim.performance,
+                other: performanceArray.filter(type => type !== dbClaim.performance)
+            }
+        });
     } catch (error) {
         console.log(error);
     }
