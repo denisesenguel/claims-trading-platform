@@ -12,6 +12,7 @@ hbs.registerHelper('startCase', function (string) {
 
 const { isLoggedInAsBuyer, isLoggedInAsSeller, isLoggedInAsEither } = require("./../middleware/isLoggedIn");
 const { isLoggedOutAsBuyer, isLoggedOutAsSeller } = require("./../middleware/isLoggedOut");
+const isClaimOwner = require("./../middleware/isClaimOwner");
 
 
 router.get("/create", isLoggedInAsSeller, (req, res, next)=> {
@@ -69,7 +70,7 @@ router.get("/:claimId/:sellerId/details", async (req, res, next) => {
     }
 });
 
-router.get("/:claimId/edit", isLoggedInAsSeller, async (req, res, next)=> {
+router.get("/:claimId/edit", isLoggedInAsSeller, isClaimOwner, async (req, res, next)=> {
     try {
         const dbClaim = await Claim.findById(req.params.claimId).lean();
         dbClaim[`${dbClaim.currency}`] = "selected";
@@ -83,7 +84,7 @@ router.get("/:claimId/edit", isLoggedInAsSeller, async (req, res, next)=> {
     }
 });
 
-router.post("/:claimId/edit", isLoggedInAsSeller, async (req, res, next)=> {
+router.post("/:claimId/edit", isLoggedInAsSeller, isClaimOwner, async (req, res, next)=> {
     try {
         const dbUpdated = await Claim.findByIdAndUpdate(req.params.claimId, req.body, {new: true});
         console.log("dbUpdated: ", dbUpdated);
@@ -93,7 +94,7 @@ router.post("/:claimId/edit", isLoggedInAsSeller, async (req, res, next)=> {
     }
 });
 
-router.get("/:claimId/delete", isLoggedInAsSeller, async (req, res, next) => {
+router.get("/:claimId/delete", isLoggedInAsSeller, isClaimOwner, async (req, res, next) => {
     try {
         await Claim.findByIdAndDelete(req.params.claimId);
         res.redirect("/user/my-claims");
