@@ -1,20 +1,20 @@
 <div class="card p-2 mb-2">
     
-    <div class="container-fluid">
+    <div class="container">
 
-        <div class="row justify-content-between align-items-center">
+        <div class="row justify-content-between align-items-center mt-2">
 
-            <div class="col-3">
-                <h6> {{claimType}} </h6>
-                <h5> {{currency}} {{this.faceValue}} </h5>   
+            <div class="col-6">
+                <h6> {{claimType}} from {{debtor}} </h6>
+                <h5> {{currency}} {{faceValue}} </h5>   
             </div>
 
-            <div class="col-3">
+            <div class="col-4">
                 <h6 class="text-muted"> <i class="bi-geo-alt"></i> {{debtorLocation}}</h6>
                 <h6 class="text-muted"> {{#if performance}} {{performance}} {{/if}}</h6>
             </div>
             
-            <div class="col-3 d-flex align-items-end justify-content-end">
+            <div class="col-2 d-flex align-items-end justify-content-end">
                 <a href="/claims/{{_id}}/details"><button class="btn btn-primary">View Details</button></a>
             </div>
 
