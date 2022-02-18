@@ -1,0 +1,111 @@
+<div class="container-fluid">
+    <div class="row">
+        {{!-- <div class="col-1"></div> --}}
+        <div class="col-3">
+            <div class="m-5 px-5 py-1 w-100 border rounded">
+                {{!-- <label for="sort" class="form-label">Sort by:</label> --}}
+                <form action="/claims/search" method="post">
+                    <h4 class="mt-4 mb-3">Sort by:</h4>
+                        <select id="sortBy" class="form-select form-select-sm w-100 mt-1" name="sortBy">
+                            <option value="">None</option>
+                            <option value="faceValue">Face Value</option>
+                            <option value="minimumPrice">Minimum Price</option>
+                            <option value="maturity">Maturity</option>
+                            <option value="claimType">Claim Type</option>
+                            <option value="performance">Performance</option>
+                        </select>
+                    <div class="input-group input-group-sm my-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="sortOrder" id="ascending" value="1">
+                            <label class="form-check-label" for="ascending">Ascending</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input form-check-input" type="radio" name="sortOrder" id="descending" value="-1">
+                            <label class="form-check-label" for="descending">Descending</label>
+                        </div>
+                    </div>
+                    <h4 class="mt-4 mb-3">Filter by:</h4>
+                    <div class="mb-3">
+                        <label for="currency" class="form-label form-label-sm">Currency</label>
+                        <select id="currency" class="form-select form-select-sm w-100 mt-1" name="currency">
+                            <option value="">None</option>
+                            {{#each dropDowns.currency}}
+                                <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="row">
+                        <p>Face Value:</p>
+                        <div class="col">
+                            <div class="mb-3">
+                                <label for="faceValueStart" class="form-label form-label-sm">Min</label>
+                                <input id="faceValueStart" name="faceValueStart" type="number" class="form-control form-control-sm" >
+                            </div>
+                        </div>
+                        <div class="col">
+                                <div class="mb-3">
+                                    <label for="faceValueEnd" class="form-label">Max</label>
+                                    <input id="faceValueEnd" name="faceValueEnd" type="number" class="form-control form-control-sm" >
+                                </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="mb-3">
+                        <label for="debtor" class="form-label">Debtor</label>
+                        <input id="debtor" type="text" class="form-control form-control-sm" name="debtor">
+                    </div>
+                     <div class="mb-3">
+                        <label for="debtorLocation" class="form-label form-label-sm">Debtor Location</label>
+                        <select id="debtorLocation" class="form-select form-select-sm w-100 mt-1" name="debtorLocation">
+                            <option value="">None</option>
+                            {{#each dropDowns.location}}
+                                <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                     <div class="mb-3">
+                        <label for="claimType" class="form-label">Claim Type</label>
+                         <select id="claimType" class="form-select form-select-sm w-100 mt-1" name="claimType">
+                            <option value="">None</option>
+                            {{#each dropDowns.claimType}}
+                                <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="mb-3"></div>
+                        <label for="performance" class="form-label">Performance</label>
+                        <select id="performance" class="form-select form-select-sm w-100 mt-1" name="performance">
+                            <option value="">None</option>
+                            {{#each dropDowns.performance}}
+                                <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                        </select> 
+                    </d>
+                    <button id="search-btn" type="submit" class="btn btn-primary my-3">Search</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-9">
+            {{#if searched}}
+                <h5 class="m-2 mt-5 mb-4 text-center">Search results: {{results.length}}</h5>
+            {{/if}}
+            <div class="m-5">
+                <div class="m-2">
+                {{#if results}}
+                    {{#each results}}
+
+                        {{> claimSummary this}}
+
+                    {{/each}}
+                {{else}}
+                    <p class="ms-5 text-muted text-center">No results found</p>
+                {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

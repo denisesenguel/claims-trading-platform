@@ -23,7 +23,6 @@ async function populateDatabase(numberOfBuyers, numberOfSellers, numberOfClaims)
         const dbClaim = await Claim.create(claim);
         const updatedSeller = await Seller.findByIdAndUpdate(claim.seller, {$push : {listedClaims : dbClaim._id}}, {new: true});
         if (index === claimsArray.length - 1) {
-            console.log("is this exectuting?")
             mongoose.connection.close(); 
     }});
 }

@@ -41,15 +41,15 @@ router.post("/create", isLoggedInAsSeller, async (req, res, next)=> {
     }
 });
 
-router.get("/", async (req, res, next) => {
-    try {
-        const allClaims = await Claim.find().lean();
-        allClaims.forEach(c => c.faceValue = c.faceValue.toLocaleString());
-        res.render("claims/claims-overview", {claims: allClaims});
-    } catch (error) {
-        console.log(error);
-    }
-});
+// router.get("/", async (req, res, next) => {
+//     try {
+//         const allClaims = await Claim.find().lean();
+//         allClaims.forEach(c => c.faceValue = c.faceValue.toLocaleString());
+//         res.render("claims/claim-search", {claims: allClaims});
+//     } catch (error) {
+//         console.log(error);
+//     }
+// });
 
 router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
     try {
@@ -133,5 +133,142 @@ router.get("/:claimId/delete", isLoggedInAsSeller, isClaimOwner, async (req, res
     }
 });
 
+router.get("/", async (req, res, next) => {
+    try {
+
+        const {currencies, countries} = await getCountries();
+        const dbResults = await Claim.find({}).lean();
+        dbResults.forEach(c => c.faceValue = c.faceValue.toLocaleString());
+        res.render("claims/claim-search", { 
+            results: dbResults,
+            dropDowns: {
+                performance: performanceArray,
+                claimType: claimTypeArray,
+                currency: currencies,
+                location: countries
+            }
+        });
+    } catch (error) {
+        console.log("Error getting claims from DB: ", error);
+    }
+});
+
+router.post("/search", async (req, res, next)=> {
+    try {
+        const {currencies, countries} = await getCountries();
+        dbResults = await queryDatabase(req.body);
+        dbResults.forEach(c => c.faceValue = c.faceValue.toLocaleString());
+        res.render("claims/claim-search", { 
+            results: dbResults,
+            dropDowns: {
+                performance: performanceArray,
+                claimType: claimTypeArray,
+                currency: currencies,
+                location: countries
+            },
+            searched: true
+        });
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+async function queryDatabase(reqBody){
+
+   let sortQuery = {};
+
+    if (reqBody.sortBy && reqBody.sortOrder) {
+        sortQuery[`${reqBody.sortBy}`] = reqBody.sortOrder;
+    }
+
+    let queryArray = [];
+    
+    let faceValueQuery = {};
+    let debtorQuery = {};
+    let debtorLocationQuery = {};
+    let claimTypeQuery = {};
+    let performanceQuery = {};
+    let currencyQuery = {};
+
+    if (reqBody.currency) {
+        currencyQuery = {currency: reqBody.currency};
+        queryArray.push(currencyQuery);
+    }
+
+    if (reqBody.faceValueStart) {
+        faceValueQuery = {faceValue: {$gte: reqBody.faceValueStart}};
+    }
+    if (reqBody.faceValueEnd) {
+        faceValueQuery = {faceValue: {$gte: reqBody.faceValueStart, $lte: reqBody.faceValueEnd}};
+    }
+
+    if (reqBody.faceValueStart || reqBody.faceValueEnd) {
+            queryArray.push(faceValueQuery);
+    }
+    if (reqBody.debtor) {
+        debtorQuery = {debtor: reqBody.debtor};
+        queryArray.push(debtorQuery);
+    }
+    if (reqBody.debtorLocation) {
+        debtorLocationQuery = {debtorLocation: reqBody.debtorLocation};
+        queryArray.push(debtorLocationQuery);
+    }
+    if (reqBody.claimType) {
+        claimTypeQuery = {claimType: reqBody.claimType};
+        queryArray.push(claimTypeQuery);
+    }
+    if (reqBody.performance) {
+        performanceQuery = {performance: reqBody.performance};
+        queryArray.push(performanceQuery);
+    }
+    if (queryArray.length === 0) {
+        filterQuery = {};
+    } else if (queryArray.length === 1) {
+        filterQuery = queryArray[0];
+    } else {
+        filterQuery = {$and: queryArray}
+    }
+    console.log("filterQuery: ", filterQuery);
+    console.log("sortQuery: ", sortQuery);
+    
+    const dbResults = await Claim.find(filterQuery).sort(sortQuery).lean();
+    return dbResults;
+
+}
+
+
+
+// async function queryDatabase(reqBody){
+//     let query = {};
+//     queryObject = {};
+//     sortObject = {};
+//     let sortObjectKey;
+
+//     let queryArray = [];
+//     for (let key in reqBody) {
+//         queryObject = {};
+//         if (reqBody[`${key}`]) {
+//             if (key === "sortBy") {
+//                 sortObject[reqBody[`${key}`]] = 1;
+//                 sortObjectKey = [reqBody[`${key}`]];
+//             } else if (key === "sortOrder") {
+//                 sortObject[sortObjectKey] = Number(reqBody[`${key}`]);
+//             } else if (key !== "sortBy" && key !== "sortOrder") {
+//                 queryObject[`${key}`] = reqBody[`${key}`];
+//                 queryArray.push(queryObject);
+//             }
+//         }
+//     }
+//     if (queryArray.length === 0) {
+//         query = {};
+//     } else if (queryArray.length === 1) {
+//         query = queryArray[0];
+//     } else {
+//         query = {$and: queryArray}
+//     }
+   
+//     const dbResults = await Claim.find(query).sort(sortObject);
+//     return dbResults;
+// } 
 
 module.exports = router;
