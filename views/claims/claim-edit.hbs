@@ -8,15 +8,21 @@
         </label>
         
         <label class="form-label w-50 mb-3">Debtor country
-            <input class="form-control w-100" type="text" name="debtorLocation" value="{{claim.debtorLocation}}" required>
+            <select class="form-select w-100 mt-1" name="debtorLocation">
+                    <option value={{countries.selected}} selected>{{countries.selected}}</option>
+                    {{#each countries.other}}
+                        <option value={{this.countryName}}>{{this.countryName}}</option>
+                    {{/each}}
+                </select>
         </label>
 
         <div class="w-50 d-flex">
             <label class="form-label w-25 mb-3">Currency
                 <select class="form-select w-100 mt-1" name="currency">
-                    <option value="EUR" {{#if claim.EUR}} {{claim.EUR}} {{/if}}>EUR</option>
-                    <option value="USD" {{#if claim.USD}} {{claim.USD}} {{/if}}>USD</option>
-                    <option value="GBP" {{#if claim.GBP}} {{claim.GBP}} {{/if}}>GBP</option>
+                    <option value={{currencies.selected}} selected>{{currencies.selected}}</option>
+                    {{#each currencies.other}}
+                        <option value={{this}}>{{this}}</option>
+                    {{/each}}
                 </select>
             </label>
             <label class="form-label w-75 mb-3">Face Value
@@ -27,11 +33,11 @@
         <div class="w-50 d-flex">
             <label class="form-label w-50 mb-3">Claim Type
                 <select class="form-select w-100 mt-1" name="claimType">
-                    <option value="Corporate"{{#if claim.Corporate}} {{claim.Corporate}} {{/if}} >Corporate</option>
-                    <option value="Consumer" {{#if claim.Consumer}} {{claim.Consumer}} {{/if}}>Consumer</option>
+                    <option value="Corporate Loan"{{#if claim.Corporate}} {{claim.Corporate}} {{/if}} >Corporate</option>
+                    <option value="Consumer Debt" {{#if claim.Consumer}} {{claim.Consumer}} {{/if}}>Consumer</option>
                     <option value="Retail Mortgage"{{#if claim.[Retail Mortgage]}} {{claim.[Retail Mortgage]}} {{/if}}>Retail Mortgage</option>
-                    <option value="Commercial Real Estate" {{#if claim.[Commercial Real Estate]}} {{claim.[Commercial Real Estate]}} {{/if}}>Commercial Real Estate</option>
-                    <option value="Trade" {{#if claim.Trade}} {{claim.Trade}} {{/if}}>Trade</option>
+                    <option value="Commercial Real Estate Loan" {{#if claim.[Commercial Real Estate]}} {{claim.[Commercial Real Estate]}} {{/if}}>Commercial Real Estate</option>
+                    <option value="Trade Claim" {{#if claim.Trade}} {{claim.Trade}} {{/if}}>Trade</option>
                 </select>
             </label>
             <label class="form-label w-50 mb-3 mt-1">Minimum Price (% of Face Value)
@@ -51,7 +57,8 @@
                 <input class="form-control w-100" type="date" name="maturity" value={{claim.maturity}}>
             </label>
         </div>
-        <button type="submit" class="btn btn-primary mt-5">Publish changes</button>
+        <a href="/claims/{{claim._id}}/details"><button class="btn btn-primary mt-3">Back to Details</button></a>
+        <button type="submit" class="btn btn-primary mt-3">Publish changes</button>
     </form>
 </div>
 

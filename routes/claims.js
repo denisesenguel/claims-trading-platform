@@ -1,10 +1,15 @@
 
 const router = require("express").Router();
+const axios = require("axios");
+const lodash = require("lodash");
+const mongoose = require("mongoose");
+
 const Seller = require("./../models/Seller.model");
 const Claim = require("./../models/Claim.model");
-const mongoose = require("mongoose");
-const { format } = require("date-fns");
-const lodash = require("lodash");
+const {format} = require("date-fns");
+
+const getCountries = require("./../utils/get-countries");
+
 const hbs = require("handlebars");
 hbs.registerHelper('startCase', function (string) { 
  return lodash.startCase(string);
@@ -15,17 +20,17 @@ const { isLoggedOutAsBuyer, isLoggedOutAsSeller } = require("./../middleware/isL
 const isClaimOwner = require("./../middleware/isClaimOwner");
 
 
-router.get("/create", isLoggedInAsSeller, (req, res, next)=> {
-    res.render("claims/claim-create");
+router.get("/create", isLoggedInAsSeller, async (req, res, next)=> {
+    const {countries, currencies} = await getCountries();
+    res.render("claims/claim-create", {countries: countries, currencies: currencies});
+    
 });
 
 router.post("/create", isLoggedInAsSeller, async (req, res, next)=> {
     try {
-        // const { debtor, debtorLocation, faceValue, currency, type, minimumPrice, performance, maturity } = req.body;
         req.body.seller = req.session.seller._id;
         const dbClaim = await Claim.create(req.body);
         const updatedSeller = await Seller.findByIdAndUpdate(req.session.seller._id, {$push: {listedClaims: dbClaim._id}}, {new: true});
-        console.log("UPDATED SELLER: ", updatedSeller);
         res.redirect("/user/my-claims");
     } catch (error) {
         console.log(error);
@@ -73,12 +78,21 @@ router.get("/:claimId/:sellerId/details", async (req, res, next) => {
 router.get("/:claimId/edit", isLoggedInAsSeller, isClaimOwner, async (req, res, next)=> {
     try {
         const dbClaim = await Claim.findById(req.params.claimId).lean();
-        dbClaim[`${dbClaim.currency}`] = "selected";
+        
         dbClaim[`${dbClaim.claimType}`] = "selected";
         dbClaim[`${dbClaim.performance}`] = "selected";
         dbClaim.maturity = format(dbClaim.maturity, "yyyy-MM-dd");
-        console.log("dbClaim: ", dbClaim);
-        res.render("claims/claim-edit", {claim: dbClaim});
+        
+        const {countries, currencies} = await getCountries();
+        const countriesDistinction = {
+            selected: dbClaim.debtorLocation,
+            other: countries.filter(country => country.countryName != dbClaim.debtorLocation)
+        };
+        const currenciesDistinction = {
+            selected: dbClaim.currency,
+            other: currencies.filter(code => code != dbClaim.currency)
+        };
+        res.render("claims/claim-edit", {claim: dbClaim, currencies: currenciesDistinction, countries: countriesDistinction});
     } catch (error) {
         console.log(error);
     }
