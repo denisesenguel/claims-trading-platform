@@ -2,10 +2,10 @@
     <div class="row">
         {{!-- <div class="col-1"></div> --}}
         <div class="col-3">
-            <div class="m-5 px-5 py-1 w-100 border">
+            <div class="m-5 px-5 py-1 w-100 border rounded">
                 {{!-- <label for="sort" class="form-label">Sort by:</label> --}}
                 <form action="/claims/search" method="post">
-                    <h6 class="mt-4 mb-3">Sort by:</h6>
+                    <h4 class="mt-4 mb-3">Sort by:</h4>
                         <select id="sortBy" class="form-select form-select-sm w-100 mt-1" name="sortBy">
                             <option value="">None</option>
                             <option value="faceValue">Face Value</option>
@@ -24,7 +24,7 @@
                             <label class="form-check-label" for="descending">Descending</label>
                         </div>
                     </div>
-                    <h6 class="mt-4 mb-3">Filter by:</h6>
+                    <h4 class="mt-4 mb-3">Filter by:</h4>
                     <div class="mb-3">
                         <label for="currency" class="form-label form-label-sm">Currency</label>
                         <select id="currency" class="form-select form-select-sm w-100 mt-1" name="currency">
@@ -35,18 +35,16 @@
                         </select>
                     </div>
                     <div class="row">
+                        <p>Face Value:</p>
                         <div class="col">
-
                             <div class="mb-3">
-                                <label for="faceValueStart" class="form-label form-label-sm">Face Value:</label>
+                                <label for="faceValueStart" class="form-label form-label-sm">Min</label>
                                 <input id="faceValueStart" name="faceValueStart" type="number" class="form-control form-control-sm" >
                             </div>
-
-
                         </div>
                         <div class="col">
                                 <div class="mb-3">
-                                    <label for="faceValueEnd" class="form-label">And:</label>
+                                    <label for="faceValueEnd" class="form-label">Max</label>
                                     <input id="faceValueEnd" name="faceValueEnd" type="number" class="form-control form-control-sm" >
                                 </div>
                         </div>
@@ -85,13 +83,15 @@
                             {{/each}}
                         </select> 
                     </d>
-                    <button id="search-btn" type="submit" class="btn btn-primary btn-sm my-3">Search</button>
+                    <button id="search-btn" type="submit" class="btn btn-primary my-3">Search</button>
                 </form>
             </div>
         </div>
-        <div class="col-8">
-            <h5 class="m-2 mt-5 mb-4 text-center">Search results {{results.length}}</h5>
-            <div class="m-5 border">
+        <div class="col-9">
+            {{#if searched}}
+                <h5 class="m-2 mt-5 mb-4 text-center">Search results: {{results.length}}</h5>
+            {{/if}}
+            <div class="m-5">
                 <div class="m-2">
                 {{#if results}}
                     {{#each results}}

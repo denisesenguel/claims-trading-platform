@@ -137,7 +137,8 @@ router.get("/", async (req, res, next) => {
     try {
 
         const {currencies, countries} = await getCountries();
-        const dbResults = await Claim.find({});
+        const dbResults = await Claim.find({}).lean();
+        dbResults.forEach(c => c.faceValue = c.faceValue.toLocaleString());
         res.render("claims/claim-search", { 
             results: dbResults,
             dropDowns: {
@@ -156,7 +157,7 @@ router.post("/search", async (req, res, next)=> {
     try {
         const {currencies, countries} = await getCountries();
         dbResults = await queryDatabase(req.body);
-        // console.log("dbResults: ", dbResults);
+        dbResults.forEach(c => c.faceValue = c.faceValue.toLocaleString());
         res.render("claims/claim-search", { 
             results: dbResults,
             dropDowns: {
@@ -164,7 +165,8 @@ router.post("/search", async (req, res, next)=> {
                 claimType: claimTypeArray,
                 currency: currencies,
                 location: countries
-            }
+            },
+            searched: true
         });
     } catch (error) {
         console.log(error);
@@ -229,7 +231,7 @@ async function queryDatabase(reqBody){
     console.log("filterQuery: ", filterQuery);
     console.log("sortQuery: ", sortQuery);
     
-    const dbResults = await Claim.find(filterQuery).sort(sortQuery);
+    const dbResults = await Claim.find(filterQuery).sort(sortQuery).lean();
     return dbResults;
 
 }
