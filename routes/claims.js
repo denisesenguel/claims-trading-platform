@@ -128,21 +128,16 @@ async function queryDatabase(reqBody){
 
     let queryArray = [];
     for (let key in reqBody) {
-        // console.log("KEY: ", key);
         queryObject = {};
         if (reqBody[`${key}`]) {
-            if (key !== "sortBy" && key !== "sortOrder") {
-                queryObject[`${key}`] = reqBody[`${key}`];
-                queryArray.push(queryObject);
-            }
             if (key === "sortBy") {
-                // console.log("reqBody[key] if key is sortBy: ", reqBody[`${key}`]);
-                // Object.defineProperty(sortObject, reqBody[`${key}`], {configurable: true, writable: true});
                 sortObject[reqBody[`${key}`]] = 1;
                 sortObjectKey = [reqBody[`${key}`]];
-            }
-            if (key === "sortOrder") {
+            } else if (key === "sortOrder") {
                 sortObject[sortObjectKey] = Number(reqBody[`${key}`]);
+            } else if (key !== "sortBy" && key !== "sortOrder") {
+                queryObject[`${key}`] = reqBody[`${key}`];
+                queryArray.push(queryObject);
             }
         }
     }
@@ -156,7 +151,6 @@ async function queryDatabase(reqBody){
     console.log("QUERY (just as entered into find(): ", query);
     console.log("SORT OBJECT (just as entered into find(): ", sortObject);
     const dbResults = await Claim.find(query).sort(sortObject);
-    // const dbResults = await Claim.find({$and: [{perfomance: "Performing"}]});
     return dbResults;
 } 
 
