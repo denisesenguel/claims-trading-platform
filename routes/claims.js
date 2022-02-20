@@ -1,8 +1,5 @@
-
 const router = require("express").Router();
-const axios = require("axios");
 const lodash = require("lodash");
-const mongoose = require("mongoose");
 
 const Seller = require("./../models/Seller.model");
 const Claim = require("./../models/Claim.model");
@@ -15,10 +12,29 @@ hbs.registerHelper('startCase', function (string) {
  return lodash.startCase(string);
 });
 
-const { isLoggedInAsBuyer, isLoggedInAsSeller, isLoggedInAsEither } = require("./../middleware/isLoggedIn");
-const { isLoggedOutAsBuyer, isLoggedOutAsSeller } = require("./../middleware/isLoggedOut");
+const { isLoggedInAsSeller, isLoggedInAsEither } = require("./../middleware/isLoggedIn");
 const isClaimOwner = require("./../middleware/isClaimOwner");
 
+
+router.get("/", async (req, res, next) => {
+    try {
+
+        const {currencies, countries} = await getCountries();
+        const dbResults = await Claim.find({}).lean();
+        dbResults.forEach(c => c.faceValue = c.faceValue.toLocaleString());
+        res.render("claims/claim-search", { 
+            results: dbResults,
+            dropDowns: {
+                performance: performanceArray,
+                claimType: claimTypeArray,
+                currency: currencies,
+                location: countries
+            }
+        });
+    } catch (error) {
+        console.log("Error getting claims from DB: ", error);
+    }
+});
 
 router.get("/create", isLoggedInAsSeller, async (req, res, next)=> {
     const {countries, currencies} = await getCountries();
@@ -37,19 +53,9 @@ router.post("/create", isLoggedInAsSeller, async (req, res, next)=> {
         const updatedSeller = await Seller.findByIdAndUpdate(req.session.seller._id, {$push: {listedClaims: dbClaim._id}}, {new: true});
         res.redirect("/user/my-claims");
     } catch (error) {
-        console.log(error);
+        console.log("Error creating claim: ", error);
     }
 });
-
-// router.get("/", async (req, res, next) => {
-//     try {
-//         const allClaims = await Claim.find().lean();
-//         allClaims.forEach(c => c.faceValue = c.faceValue.toLocaleString());
-//         res.render("claims/claim-search", {claims: allClaims});
-//     } catch (error) {
-//         console.log(error);
-//     }
-// });
 
 router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
     try {
@@ -61,21 +67,19 @@ router.get("/:claimId/details", isLoggedInAsEither, async (req, res, next) => {
             oneClaim.isEditable = (oneClaim.seller._id.toString() === req.session.seller._id) || null;
         }
         oneClaim.maturity = format(oneClaim.maturity, "L LLLL yyyy");
-        console.log("claim: ", {claim: oneClaim, claimId: req.params.claimId}, "req.session: ", req.session)
         res.render("claims/claim-details", {claim: oneClaim, claimId: req.params.claimId});
     } catch (error) {
-        console.log(error);
+        console.log("Error retrieving claim details: ", error);
     }
 });
 
 router.get("/:claimId/:sellerId/details", async (req, res, next) => {
     try {
-        console.log("REQ PARAMS: ", req.params.sellerId);
         const dbSeller = await Seller.findById(req.params.sellerId).populate("listedClaims");
         dbSeller.claimId = req.params.claimId;
         res.render("claims/claim-seller-details", {seller: dbSeller});
     } catch (error) {
-        console.log(error);
+        console.log("Error retrieving seller details: ", error);
     }
 });
 
@@ -110,7 +114,7 @@ router.get("/:claimId/edit", isLoggedInAsSeller, isClaimOwner, async (req, res, 
             }
         });
     } catch (error) {
-        console.log(error);
+        console.log("Error retrieving claim details: ", error);
     }
 });
 
@@ -120,7 +124,7 @@ router.post("/:claimId/edit", isLoggedInAsSeller, isClaimOwner, async (req, res,
         console.log("dbUpdated: ", dbUpdated);
         res.redirect("/user/my-claims");
     } catch (error) {
-        console.log(error);
+        console.log("Error updating claim: ", error);
     }
 });
 
@@ -129,27 +133,7 @@ router.get("/:claimId/delete", isLoggedInAsSeller, isClaimOwner, async (req, res
         await Claim.findByIdAndDelete(req.params.claimId);
         res.redirect("/user/my-claims");
     } catch (error) {
-        console.log(error);
-    }
-});
-
-router.get("/", async (req, res, next) => {
-    try {
-
-        const {currencies, countries} = await getCountries();
-        const dbResults = await Claim.find({}).lean();
-        dbResults.forEach(c => c.faceValue = c.faceValue.toLocaleString());
-        res.render("claims/claim-search", { 
-            results: dbResults,
-            dropDowns: {
-                performance: performanceArray,
-                claimType: claimTypeArray,
-                currency: currencies,
-                location: countries
-            }
-        });
-    } catch (error) {
-        console.log("Error getting claims from DB: ", error);
+        console.log("Error deleting claim: ", error);
     }
 });
 
@@ -169,7 +153,7 @@ router.post("/search", async (req, res, next)=> {
             searched: true
         });
     } catch (error) {
-        console.log(error);
+        console.log("Error querying DB for search results: ", error);
     }
 });
 
@@ -228,47 +212,10 @@ async function queryDatabase(reqBody){
     } else {
         filterQuery = {$and: queryArray}
     }
-    console.log("filterQuery: ", filterQuery);
-    console.log("sortQuery: ", sortQuery);
     
     const dbResults = await Claim.find(filterQuery).sort(sortQuery).lean();
     return dbResults;
 
 }
-
-
-
-// async function queryDatabase(reqBody){
-//     let query = {};
-//     queryObject = {};
-//     sortObject = {};
-//     let sortObjectKey;
-
-//     let queryArray = [];
-//     for (let key in reqBody) {
-//         queryObject = {};
-//         if (reqBody[`${key}`]) {
-//             if (key === "sortBy") {
-//                 sortObject[reqBody[`${key}`]] = 1;
-//                 sortObjectKey = [reqBody[`${key}`]];
-//             } else if (key === "sortOrder") {
-//                 sortObject[sortObjectKey] = Number(reqBody[`${key}`]);
-//             } else if (key !== "sortBy" && key !== "sortOrder") {
-//                 queryObject[`${key}`] = reqBody[`${key}`];
-//                 queryArray.push(queryObject);
-//             }
-//         }
-//     }
-//     if (queryArray.length === 0) {
-//         query = {};
-//     } else if (queryArray.length === 1) {
-//         query = queryArray[0];
-//     } else {
-//         query = {$and: queryArray}
-//     }
-   
-//     const dbResults = await Claim.find(query).sort(sortObject);
-//     return dbResults;
-// } 
 
 module.exports = router;

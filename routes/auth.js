@@ -14,10 +14,6 @@ const Buyer = require("../models/Buyer.model");
 const { isLoggedOutAsBuyer, isLoggedOutAsSeller } = require("../middleware/isLoggedOut");
 const { isLoggedInAsEither } =  require("../middleware/isLoggedIn");
 
-// Require necessary (isLoggedOut and isLiggedIn) middleware in order to control access to specific routes
-// const isLoggedOut = require("../middleware/isLoggedOut");
-// const isLoggedIn = require("../middleware/isLoggedIn");
-
 router.get("/signup", isLoggedOutAsBuyer, isLoggedOutAsSeller, (req, res) => {
   if (req.query.role === "buyer") {
     res.render("auth/signup", {buyer: "checked"});
@@ -42,18 +38,6 @@ router.post("/signup", async (req, res) => {
       errorMessage: "Your password needs to be at least 8 characters long.",
     });
   }
-
-  //   ! This use case is using a regular expression to control for special characters and min length
-  /*
-  const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
-
-  if (!regex.test(password)) {
-    return res.status(400).render("signup", {
-      errorMessage:
-        "Password needs to have at least 8 chars and must contain at least one number, one lowercase and one uppercase letter.",
-    });
-  }
-  */
 
   // Search the database for a user with the username submitted in the form
   try {
